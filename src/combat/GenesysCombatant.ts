@@ -20,7 +20,10 @@ export default class GenesysCombatant extends Combatant {
 	initiativeSkill?: InitiativeSkill;
 
 	get disposition() {
-		switch ((this.actor.token ?? (this.actor.prototypeToken as any)).disposition) {
+		const token = this.actor?.token ?? (this.actor?.prototypeToken as any);
+		if (!token) return 'neutral';
+
+		switch (token.disposition) {
 			case CONST.TOKEN_DISPOSITIONS.FRIENDLY:
 				return 'friendly';
 
@@ -35,8 +38,8 @@ export default class GenesysCombatant extends Combatant {
 		}
 	}
 
-	override async rollInitiative(formula: string) {
-		const roll = this.getInitiativeRoll(formula);
+	override async rollInitiative(formula?: string): Promise<this | undefined> {
+		const roll = this.getInitiativeRoll(formula ?? 'Unskilled');
 		await roll.evaluate();
 		const results = GenesysRoller.parseRollResults(roll);
 
@@ -44,14 +47,17 @@ export default class GenesysCombatant extends Combatant {
 	}
 
 	override getInitiativeRoll(skillName: string = 'Unskilled', charFallback: Characteristic = Characteristic.Brawn) {
-		const skill = this.actor.items.find((i) => (i.type as string) === 'skill' && i.name.toLowerCase() === skillName.toLowerCase()) as GenesysItem<SkillDataModel> | undefined;
+		const actor = this.actor;
+		if (!actor) return new Roll('0');
+
+		const skill = actor.items.find((i) => (i.type as string) === 'skill' && i.name.toLowerCase() === skillName.toLowerCase()) as GenesysItem<SkillDataModel> | undefined;
 		const characteristic = skill?.systemData?.characteristic ?? charFallback;
-		const system = this.actor.systemData as CharacterDataModel | AdversaryDataModel;
+		const system = actor.system as CharacterDataModel | AdversaryDataModel;
 		const characteristicValue = system.characteristics[characteristic];
 
 		let skillValue = skill?.systemData?.rank ?? 0;
-		if (skill && (this.actor.type as string) === 'minion') {
-			skillValue = Math.clamp((this.actor.systemData as MinionDataModel).remainingMembers - 1, 0, 5);
+		if (skill && (actor.type as string) === 'minion') {
+			skillValue = Math.clamp((actor.system as MinionDataModel).remainingMembers - 1, 0, 5);
 		}
 
 		const yellow = Math.min(characteristicValue, skillValue);

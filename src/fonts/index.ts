@@ -15,9 +15,9 @@ import './scss/all.scss';
  * @param style Font style
  * @param weight Font weights
  */
-function buildDefinition(path: string, style: 'normal' | 'italic' = 'normal', weight: string = '400'): FontDefinition {
+function buildDefinition(path: string, style: 'normal' | 'italic' = 'normal', weight: string = '400'): CONFIG.Font.Definition {
 	return {
-		urls: [`systems/genesys/assets/fonts/${path}`],
+		url: [`systems/genesys/assets/fonts/${path}`],
 		style,
 		weight,
 	};

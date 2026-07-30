@@ -12,14 +12,13 @@ import GenesysCombatTracker from '@/combat/GenesysCombatTracker';
 import GenesysCombatTrackerV13 from '@/combat/GenesysCombatTracker[v13]';
 
 export function register() {
-	CONFIG.Combat.documentClass = GenesysCombat;
-	CONFIG.Combatant.documentClass = GenesysCombatant;
+	(CONFIG.Combat as any).documentClass = GenesysCombat;
+	(CONFIG.Combatant as any).documentClass = GenesysCombatant;
 
 	if (game.version.startsWith('13')) {
-		// @ts-expect-error
-		CONFIG.ui.combat = GenesysCombatTrackerV13;
+		(CONFIG.ui as any).combat = GenesysCombatTrackerV13;
 	} else {
-		CONFIG.ui.combat = GenesysCombatTracker;
+		(CONFIG.ui as any).combat = GenesysCombatTracker;
 	}
 
 	registerCombatSocket();

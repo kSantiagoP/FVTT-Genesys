@@ -112,10 +112,6 @@ type TokenAttributeChoices = Record<string, unknown>;
 /** v12 → v13: Removed. */
 type TokenResourceData = Record<string, unknown>;
 
-// -- Fonts -- //
-
-/** v12 → v13: Removed. */
-type FontDefinition = Record<string, unknown>;
 
 // -- Effects -- //
 
