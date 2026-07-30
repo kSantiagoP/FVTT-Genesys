@@ -1,6 +1,7 @@
 import { Characteristic } from '@/data/Characteristics';
 import GenesysEffect from './GenesysEffect';
 import { PoolModGlyphPattern } from '@/dice/types/GenesysPoolModifications';
+import './GenesysEffectSheet.scss';
 
 type EffectChangeExpanded = ActiveEffect.ChangeData & {
 	skill?: string;

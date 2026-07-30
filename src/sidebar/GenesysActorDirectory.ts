@@ -3,6 +3,8 @@ import { DragTransferData, constructDragTransferTypeFromData } from '@/data/Drag
 
 export default class GenesysActorDirectory extends ActorDirectory {
 	protected _onDragStart(event: ElementDragEvent): void {
+		// @ts-expect-error — Base type (v13) não declara _onDragStart, mas Foundry v14 fornece em runtime
+		super._onDragStart(event);
 		const dragData = JSON.parse(event.dataTransfer?.getData('text/plain') ?? '{}') as DragTransferData;
 		if (dragData.type === 'Actor' && dragData.uuid) {
 			const draggedActor = foundry.utils.fromUuidSync(dragData.uuid) as { type: string } | null;

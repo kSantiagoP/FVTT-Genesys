@@ -6,7 +6,6 @@
  * @file Effect registration
  */
 import GenesysEffect from '@/effects/GenesysEffect';
-import GenesysEffectSheet from '@/effects/GenesysEffectSheet';
 import GenesysEffectSheetV2 from './GenesysEffectSheetV2';
 
 export function register() {

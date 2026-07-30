@@ -151,10 +151,6 @@ Hooks.on('renderDialog', (_dialog: any, html: any, _data: any) => {
 });
 
 Hooks.on('renderChatLog', (_sidebar: any, html: any, _data: any) => {
-    if (game.version.startsWith('13')) {
-        return;
-    }
-
     const diceIcon = html.find('#chat-controls > .chat-control-icon');
     diceIcon.on('click', async (_event: any) => {
         const controlledTokens = (canvas as any).tokens?.controlled || [];
@@ -188,7 +184,7 @@ Hooks.on('chatMessage', (chatLog: any, message: string, _chatData: any) => {
 const wikiLinkPattern = /\[\[([^|\]]+)(\|([^\]]+))?\]\]/g;
 
 Hooks.on('renderSettingsConfig', (_app: any, html: any, _data: any) => {
-    const theHtml = game.version.startsWith('13') ? (html as unknown as HTMLElement) : html[0];
+    const theHtml = html as unknown as HTMLElement;
 
     let note = theHtml.querySelector(`[data-setting-id='genesys.${KEY_DEFAULT_DIFFICULTY}'] > .notes`);
     if (!note) {

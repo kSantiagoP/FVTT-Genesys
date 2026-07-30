@@ -85,8 +85,8 @@ export default class CharacterSheet extends VueSheet(GenesysActorSheet<Character
 
                 await this.applyArchetype(droppedItem as GenesysItem<ArchetypeDataModel>);
 
-                // @ts-expect-error
-                clonedDroppedItem = await super._onDropItem(event, data);
+
+                clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<any>[] | undefined;
             } else if ((droppedItem.type as string) === 'career') {
                 if (this.actor.systemData.experienceJournal.entries.some((entry: any) => (entry.type as string) === EntryType.Skill)) {
                     return false;
@@ -100,22 +100,20 @@ export default class CharacterSheet extends VueSheet(GenesysActorSheet<Character
                 const career = await this.applyCareer(droppedItem as GenesysItem<CareerDataModel>);
                 clonedDroppedItem = [career];
             } else {
-                // @ts-expect-error
-                clonedDroppedItem = await super._onDropItem(event, data);
+
+                clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<any>[] | undefined;
             }
         } else if (CharacterDataModel.isRelevantTypeForContext('SKILL', droppedItem.type as string)) {
             if ((droppedItem.type as string) === 'skill' && this.actor.items.find((item: any) => (item.type as string) === 'skill' && item.name === droppedItem.name)) {
                 return false;
             }
-            // @ts-expect-error
-            clonedDroppedItem = await super._onDropItem(event, data);
+            clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<any>[] | undefined;
         } else if (CharacterDataModel.isRelevantTypeForContext('COMBAT', droppedItem.type as string)) {
-            // @ts-expect-error
-            clonedDroppedItem = await super._onDropItem(event, data);
+            clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<any>[] | undefined;
         } else if (CharacterDataModel.isRelevantTypeForContext('TALENT', droppedItem.type as string)) {
             if ((droppedItem.type as string) === 'ability') {
-                // @ts-expect-error
-                clonedDroppedItem = await super._onDropItem(event, data);
+
+                clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<any>[] | undefined;
             } else if ((droppedItem.type as string) === 'talent') {
                 const droppedTalent = droppedItem as GenesysItem<TalentDataModel>;
                 let targetTalent = this.actor.items.find((i: any) => (i.type as string) === 'talent' && i.name === droppedTalent.name) as GenesysItem<TalentDataModel> | undefined;
@@ -205,15 +203,15 @@ export default class CharacterSheet extends VueSheet(GenesysActorSheet<Character
 
                 clonedDroppedItem = [targetTalent];
             } else {
-                // @ts-expect-error
-                clonedDroppedItem = await super._onDropItem(event, data);
+
+                clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<any>[] | undefined;
             }
         } else if (CharacterDataModel.isRelevantTypeForContext('INVENTORY', droppedItem.type as string)) {
             if (droppedItem.actor) {
                 clonedDroppedItem = await transferInventoryBetweenActors(dragData, this.actor, (type: any) => CharacterDataModel.isRelevantTypeForContext('INVENTORY', type));
             } else {
-                // @ts-expect-error
-                clonedDroppedItem = await super._onDropItem(event, data);
+
+                clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<any>[] | undefined;
             }
 
             if (Array.isArray(clonedDroppedItem)) {
