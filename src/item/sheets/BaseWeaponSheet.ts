@@ -25,8 +25,8 @@ export default class BaseWeaponSheet extends VueSheet(GenesysItemSheet<BaseWeapo
 			return;
 		}
 
-		const systemData = this.item.systemData as BaseWeaponDataModel;
-		switch (droppedItem.type) {
+		const systemData = (this.item as unknown as GenesysItem<BaseWeaponDataModel>).systemData;
+		switch (droppedItem.type as string) {
 			// Skill Drop
 			case 'skill':
 				// Don't allow duplicates of the same skill.
@@ -43,7 +43,7 @@ export default class BaseWeaponSheet extends VueSheet(GenesysItemSheet<BaseWeapo
 				return;
 
 			// Item Quality Drop
-			case 'quality':
+			case 'quality' as string:
 				const existingIndex = systemData.qualities.findIndex((i) => i.name.toLowerCase() === droppedItem.name.toLowerCase());
 				const qualities = systemData.qualities;
 

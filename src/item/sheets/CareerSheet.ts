@@ -46,12 +46,13 @@ export default class CareerSheet extends VueSheet(GenesysItemSheet<CareerDataMod
 		}
 
 		// Prevent adding a skill that's already present.
-		if (this.item.systemData.careerSkills.find((i) => i.name.toLowerCase() === droppedItem.name.toLowerCase())) {
+		const item = this.item as unknown as GenesysItem<CareerDataModel>;
+		if (item.systemData.careerSkills.find((i: { name: string }) => i.name.toLowerCase() === droppedItem.name.toLowerCase())) {
 			return;
 		}
 
-		await this.item.update({
-			'system.careerSkills': [...this.item.systemData.careerSkills, droppedItem.toObject()],
+		await item.update({
+			'system.careerSkills': [...item.systemData.careerSkills, droppedItem.toObject()],
 		} as Record<string, unknown>);
 	}
 }

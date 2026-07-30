@@ -58,13 +58,15 @@ export default class ArchetypeSheet extends VueSheet(GenesysItemSheet<ArchetypeD
 			return;
 		}
 
+		const item = this.item as unknown as GenesysItem<ArchetypeDataModel>;
+
 		// Prevent adding a granted item that's already present.
-		if (this.item.systemData.grantedItems.find((i) => i.type === droppedItem.type && i.name === droppedItem.name)) {
+		if (item.systemData.grantedItems.find((i: { type: string; name: string }) => i.type === droppedItem.type && i.name === droppedItem.name)) {
 			return;
 		}
 
-		await this.item.update({
-			'system.grantedItems': [...this.item.systemData.grantedItems, droppedItem.toObject()],
+		await item.update({
+			'system.grantedItems': [...item.systemData.grantedItems, droppedItem.toObject()],
 		} as Record<string, unknown>);
 	}
 }

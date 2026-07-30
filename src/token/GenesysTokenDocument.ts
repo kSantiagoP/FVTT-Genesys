@@ -17,23 +17,24 @@ export type TokenAttributeDetails =
 
 export type DataModelWithTokenAttributes = Function & { tokenAttributes?: Record<string, TokenAttributeDetails> };
 
-type TrackedAttributes = TokenAttributes & {
+type GenesysTrackedAttributes = TokenDocument.TrackedAttributesDescription & {
 	source?: Record<string, TokenAttributeDetails>;
 };
 
 export default class GenesysTokenDocument extends TokenDocument {
-	override getBarAttribute(barName: string, options: { alternative?: string } = {}) {
-		const attribute: string | undefined = options.alternative || (this as Record<string, any>)[barName]?.attribute;
+	override getBarAttribute(barName: string, options?: TokenDocument.GetBarAttributeOptions): TokenDocument.GetBarAttributeReturn {
+		const attribute: string | undefined = options?.alternative || (this as Record<string, any>)[barName]?.attribute;
 		if (!this.actor || !attribute) {
 			return null;
 		}
 
-		const tokenAttributes = (this.actor.systemData.constructor as DataModelWithTokenAttributes).tokenAttributes;
+		const actor = this.actor as unknown as GenesysActor;
+		const tokenAttributes = (actor.system.constructor as DataModelWithTokenAttributes).tokenAttributes;
 		if (!tokenAttributes) {
 			return super.getBarAttribute(barName, options);
 		}
 
-		const system = this.actor.systemData;
+		const system = actor.system;
 		const targetAttribute = tokenAttributes[attribute] as TokenAttributeDetails | undefined;
 		if (!targetAttribute) {
 			return null;
@@ -44,28 +45,31 @@ export default class GenesysTokenDocument extends TokenDocument {
 			return null;
 		}
 
-		const barAttribute: TokenResourceData = {
-			type: 'value',
-			attribute: attribute,
-			editable: targetAttribute.editable,
-			value: Number(dataValue),
-		};
-
 		if (targetAttribute.isBar) {
 			const dataMax = foundry.utils.getProperty(system, targetAttribute.maxPath);
 			if (!Number.isNumeric(dataMax)) {
 				return null;
 			}
 
-			barAttribute.type = 'bar';
-			barAttribute.max = Number(dataMax);
+			return {
+				type: 'bar' as const,
+				attribute: attribute,
+				value: Number(dataValue),
+				max: Number(dataMax),
+				editable: targetAttribute.editable,
+			};
 		}
 
-		return barAttribute;
+		return {
+			type: 'value' as const,
+			attribute: attribute,
+			value: Number(dataValue),
+			editable: targetAttribute.editable,
+		};
 	}
 
-	static override getTrackedAttributes(data?: Record<string, unknown>, _path?: string[]): TrackedAttributes {
-		if (foundry.utils.isSubclass(data?.constructor, foundry.abstract.DataModel)) {
+	static override getTrackedAttributes(data?: TokenDocument.TrackedAttributesSubject | null, _path?: string[]): GenesysTrackedAttributes {
+		if (data && foundry.utils.isSubclass(data.constructor as foundry.abstract.DataModel.AnyConstructor, foundry.abstract.DataModel)) {
 			const tokenAttributes = (data!.constructor as DataModelWithTokenAttributes).tokenAttributes;
 			if (tokenAttributes) {
 				return {
@@ -79,20 +83,20 @@ export default class GenesysTokenDocument extends TokenDocument {
 		return super.getTrackedAttributes(data, _path);
 	}
 
-	static override getTrackedAttributeChoices(attributes: TrackedAttributes): TokenAttributeChoices[] {
+	static override getTrackedAttributeChoices(attributes: GenesysTrackedAttributes): TokenDocument.TrackedAttributesChoice[] {
 		attributes = attributes || this.getTrackedAttributes();
 		const barGroup = game.i18n.localize('TOKEN.BarAttributes');
 		const valueGroup = game.i18n.localize('TOKEN.BarValues');
 
 		if (attributes.source) {
-			const trackedAttributes = Object.entries(attributes.source).reduce((accum, [attributeId, attributeDetails]) => {
+			const trackedAttributes = (Object.entries(attributes.source) as [string, TokenAttributeDetails][]).reduce((accum, [attributeId, attributeDetails]) => {
 				accum.push({
 					group: attributeDetails.isBar ? barGroup : valueGroup,
 					label: attributeDetails.label,
 					value: attributeId,
 				});
 				return accum;
-			}, [] as TokenAttributeChoices[]);
+			}, [] as TokenDocument.TrackedAttributesChoice[]);
 			trackedAttributes.sort((left, right) => {
 				if (left.group !== right.group) {
 					return left.group === barGroup ? -1 : 1;

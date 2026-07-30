@@ -54,57 +54,57 @@ function basicSheet(vueComponent: any, sheetType: VueSheetConstructor = VueSheet
 export function register() {
 	Items.unregisterSheet('core', ItemSheet);
 
-	Items.registerSheet('genesys', basicSheet(AbilitySheet), {
+	Items.registerSheet('genesys', basicSheet(AbilitySheet) as any, {
 		types: ['ability'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', ArmorSheet, {
+	Items.registerSheet('genesys', ArmorSheet as any, {
 		types: ['armor'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', basicSheet(EquipmentSheet), {
+	Items.registerSheet('genesys', basicSheet(EquipmentSheet) as any, {
 		types: ['consumable', 'container', 'gear'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', basicSheet(InjurySheet), {
+	Items.registerSheet('genesys', basicSheet(InjurySheet) as any, {
 		types: ['injury'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', basicSheet(ItemQualitySheet), {
+	Items.registerSheet('genesys', basicSheet(ItemQualitySheet) as any, {
 		types: ['quality'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', basicSheet(SkillSheet), {
+	Items.registerSheet('genesys', basicSheet(SkillSheet) as any, {
 		types: ['skill'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', basicSheet(TalentSheet), {
+	Items.registerSheet('genesys', basicSheet(TalentSheet) as any, {
 		types: ['talent'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', basicSheet(WeaponSheet, BaseWeaponSheet as VueSheetConstructor), {
+	Items.registerSheet('genesys', basicSheet(WeaponSheet, BaseWeaponSheet as VueSheetConstructor) as any, {
 		types: ['weapon'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', basicSheet(VehicleWeaponSheet, BaseWeaponSheet as VueSheetConstructor), {
+	Items.registerSheet('genesys', basicSheet(VehicleWeaponSheet, BaseWeaponSheet as VueSheetConstructor) as any, {
 		types: ['vehicleWeapon'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', ArchetypeSheet, {
+	Items.registerSheet('genesys', ArchetypeSheet as any, {
 		types: ['archetype'],
 		makeDefault: true,
 	});
 
-	Items.registerSheet('genesys', CareerSheet, {
+	Items.registerSheet('genesys', CareerSheet as any, {
 		types: ['career'],
 		makeDefault: true,
 	});

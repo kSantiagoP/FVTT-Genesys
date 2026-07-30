@@ -68,7 +68,7 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.skillsCompendium,
 		type: String,
-		onChange: async (value) => {
+		onChange: async (value: string) => {
 			// We always want a skill compendium so fallback to the default value if it's ever removed.
 			let skillsCompendiumName = DEFAULT_SKILLS_COMPENDIUM;
 			if (!value) {
@@ -86,10 +86,10 @@ export function register(namespace: string) {
 				ui.notifications.error(game.i18n.format('Genesys.Notifications.MissingCompendium', { name: skillsCompendiumName }));
 			} else if (pack.metadata.type !== 'Item') {
 				ui.notifications.error(game.i18n.format('Genesys.Notifications.WrongCompendiumType', { name: skillsCompendiumName, type: pack.metadata.type }));
-			} else if (!pack.index.some((item) => (item.type as string) === 'skill')) {
+			} else if (!pack.index.some((item: { type: string }) => item.type === 'skill')) {
 				ui.notifications.warn(game.i18n.format('Genesys.Notifications.NoSkillsInCompendium', { name: skillsCompendiumName }));
 			} else {
-				skills = (await pack.getDocuments()).filter((item) => ((item as GenesysItem).type as string) === 'skill') as GenesysItem<SkillDataModel>[];
+				skills = (await pack.getDocuments()).filter((item: GenesysItem) => (item.type as string) === 'skill') as GenesysItem<SkillDataModel>[];
 			}
 
 			CONFIG.genesys.skills = skills;
@@ -103,7 +103,7 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.defaultDifficulty,
 		type: String,
-		onChange: (value) => {
+		onChange: (value: string) => {
 			const difficulty = value ?? '';
 			const difficultyPattern = new RegExp(`^${PoolModGlyphPattern.source}*$`);
 			CONFIG.genesys.settings.defaultDifficulty = difficultyPattern.test(difficulty) ? difficulty : DEFAULT_DIFFICULTY;
@@ -117,7 +117,7 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.skillForHealingInjury,
 		type: String,
-		onChange: (value) => {
+		onChange: (value: string) => {
 			CONFIG.genesys.settings.skillForHealingInjury = value ?? '';
 		},
 	});
@@ -129,7 +129,7 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.skillForRepairingHit,
 		type: String,
-		onChange: (value) => {
+		onChange: (value: string) => {
 			CONFIG.genesys.settings.skillForRepairingHit = value ?? '';
 		},
 	});
@@ -141,7 +141,7 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.currencyName,
 		type: String,
-		onChange: (value) => {
+		onChange: (value: string) => {
 			CONFIG.genesys.settings.currencyName = value ?? '';
 		},
 	});
@@ -153,8 +153,8 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.freeCareerSkillRanks,
 		type: Number,
-		onChange: (value) => {
-			const valueAsInt = Math.floor(Math.abs((value as unknown as number) ?? 0));
+		onChange: (value: number) => {
+			const valueAsInt = Math.floor(Math.abs(value ?? 0));
 			CONFIG.genesys.settings.freeCareerSkillRanks = valueAsInt;
 		},
 	});
@@ -166,9 +166,8 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.uncoupleSkillsFromCharacteristics,
 		type: Boolean,
-		onChange: (value) => {
-			const valueAsBool = (value as unknown as boolean) ?? false;
-			CONFIG.genesys.settings.uncoupleSkillsFromCharacteristics = valueAsBool;
+		onChange: (value: boolean) => {
+			CONFIG.genesys.settings.uncoupleSkillsFromCharacteristics = value;
 		},
 	});
 
@@ -179,9 +178,8 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.showAttackDetailsOnFailure,
 		type: Boolean,
-		onChange: (value) => {
-			const valueAsBool = (value as unknown as boolean) ?? false;
-			CONFIG.genesys.settings.showAttackDetailsOnFailure = valueAsBool;
+		onChange: (value: boolean) => {
+			CONFIG.genesys.settings.showAttackDetailsOnFailure = value;
 		},
 	});
 
@@ -192,9 +190,8 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.useSuperCharacteristics,
 		type: Boolean,
-		onChange: (value) => {
-			const valueAsBool = (value as unknown as boolean) ?? false;
-			CONFIG.genesys.settings.useSuperCharacteristics = valueAsBool;
+		onChange: (value: boolean) => {
+			CONFIG.genesys.settings.useSuperCharacteristics = value;
 		},
 	});
 }

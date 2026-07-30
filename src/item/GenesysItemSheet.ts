@@ -19,7 +19,7 @@ export type DropData = {
 /**
  * Basic functionality shared by all ItemSheets.
  */
-export default class GenesysItemSheet<ItemDataModel extends BaseItemDataModel = BaseItemDataModel> extends ItemSheet<GenesysItem<ItemDataModel>> {
+export default class GenesysItemSheet<ItemDataModel extends BaseItemDataModel = BaseItemDataModel> extends ItemSheet {
 	static override get defaultOptions() {
 		return {
 			...super.defaultOptions,
@@ -51,7 +51,7 @@ export default class GenesysItemSheet<ItemDataModel extends BaseItemDataModel = 
 		if (this.isEditable) {
 			// Foundry v10 and v11 bind this functionality differently so instead we override that behavior with our own.
 			html.find('img[data-edit]').off('click');
-			html.find('img[data-edit]').on('click', this._onEditImage.bind(this));
+			html.find('img[data-edit]').on('click', (ev) => { void this._onEditImage(ev as unknown as MouseEvent); });
 		}
 	}
 

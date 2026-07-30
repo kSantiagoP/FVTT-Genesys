@@ -23,7 +23,7 @@ import WeaponDataModel from '@/item/data/WeaponDataModel';
 import VehicleWeaponDataModel from '@/item/data/VehicleWeaponDataModel';
 
 export function register() {
-	CONFIG.Item.documentClass = GenesysItem;
+	(CONFIG.Item as any).documentClass = GenesysItem;
 
 	registerDataModels();
 	registerSheets();

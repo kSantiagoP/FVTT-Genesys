@@ -38,8 +38,9 @@ export default class ArmorSheet extends VueSheet(GenesysItemSheet<ArmorDataModel
 		}
 
 		if ((droppedItem.type as string) === 'quality') {
-			const existingIndex = this.item.systemData.qualities.findIndex((i) => i.name.toLowerCase() === droppedItem.name.toLowerCase());
-			const qualities = this.item.systemData.qualities;
+			const item = this.item as unknown as GenesysItem<ArmorDataModel>;
+			const existingIndex = item.systemData.qualities.findIndex((i: { name: string }) => i.name.toLowerCase() === droppedItem.name.toLowerCase());
+			const qualities = item.systemData.qualities;
 
 			if (existingIndex >= 0) {
 				// Do nothing if it's not a rated quality.

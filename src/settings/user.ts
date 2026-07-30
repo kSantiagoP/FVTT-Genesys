@@ -51,9 +51,8 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.startWithCollapsedPoolModifications,
 		type: Boolean,
-		onChange: (value) => {
-			const valueAsBool = (value as unknown as boolean) ?? false;
-			CONFIG.genesys.settings.startWithCollapsedPoolModifications = valueAsBool;
+		onChange: (value: boolean) => {
+			CONFIG.genesys.settings.startWithCollapsedPoolModifications = value;
 		},
 	});
 
@@ -64,9 +63,8 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.autoApplyPoolModifications,
 		type: Boolean,
-		onChange: (value) => {
-			const valueAsBool = (value as unknown as boolean) ?? false;
-			CONFIG.genesys.settings.autoApplyPoolModifications = valueAsBool;
+		onChange: (value: boolean) => {
+			CONFIG.genesys.settings.autoApplyPoolModifications = value;
 		},
 	});
 
@@ -87,8 +85,8 @@ export function register(namespace: string) {
 		config: true,
 		default: GENESYS_CONFIG.settings.showChanceToSucceedFromSimulations.amountOfRolls,
 		type: Number,
-		onChange: (value) => {
-			const valueAsInt = Math.floor(Math.abs((value as unknown as number) ?? 0));
+		onChange: (value: number) => {
+			const valueAsInt = Math.floor(Math.abs(value ?? 0));
 			CONFIG.genesys.settings.showChanceToSucceedFromSimulations.enabled = valueAsInt > 0;
 			CONFIG.genesys.settings.showChanceToSucceedFromSimulations.amountOfRolls = valueAsInt;
 		},
