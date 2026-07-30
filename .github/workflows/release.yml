@@ -16,7 +16,12 @@ jobs:
       - uses: actions/setup-node@v4
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: |
+          # foundry-vtt-types depende de repo privado (@pixi/basis via SSH) —
+          # não acessível no CI. Só é necessário pra typecheck local.
+          jq 'del(.devDependencies["@league-of-foundry-developers/foundry-vtt-types"])' package.json > package.json.tmp
+          mv package.json.tmp package.json
+          yarn install
 
       - name: Build
         run: yarn release
