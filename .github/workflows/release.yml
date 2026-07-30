@@ -1,62 +1,36 @@
-name: GitHub Release
+name: Release
 
 on:
   push:
-    branches: [release]
+    tags:
+      - 'v*.*.*'
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      contents: write
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
 
-      - name: Install Dependencies
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-      - name: Build Project
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: release
+      - name: Build
+        run: yarn release
 
-      - name: Identify Version Number
+      - name: Get version
         id: version
-        run: echo "::set-output name=version::$(node ./build/version.js)"
+        run: echo "version=$(node build/version.js)" >> $GITHUB_OUTPUT
 
       - name: Create Release
-        uses: actions/create-release@v1
-        id: create_release
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          draft: false
-          prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
-          tag_name: release-${{ steps.version.outputs.version }}
-          body_path: CHANGELOG.md
-
-      - name: Upload manifest.json
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/system.json
-          asset_name: manifest.json
-          asset_content_type: application/json
-
-      - name: Upload System Archive
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./genesys-${{ steps.version.outputs.version }}.zip
-          asset_name: genesys.zip
-          asset_content_type: application/zip
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create release-${{ steps.version.outputs.version }} \
+            --title "${{ steps.version.outputs.version }}" \
+            --notes "$(sed -n '/^## /{p; :a; n; /^## /q; p; ba}' CHANGELOG.md | head -n -1)" \
+            ./genesys-${{ steps.version.outputs.version }}.zip \
+            ./dist/system.json#manifest.json
