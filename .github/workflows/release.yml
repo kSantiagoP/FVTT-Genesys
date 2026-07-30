@@ -39,5 +39,5 @@ jobs:
           gh release create release-${{ steps.version.outputs.version }} \
             --title "${{ steps.version.outputs.version }}" \
             --notes "$(sed -n '/^## /{p; :a; n; /^## /q; p; ba}' CHANGELOG.md | head -n -1)" \
-            ./genesys-${{ steps.version.outputs.version }}.zip \
+            ./genesys-${{ steps.version.outputs.version }}.zip#genesys.zip \
             ./dist/system.json#manifest.json
