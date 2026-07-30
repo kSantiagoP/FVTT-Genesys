@@ -23,7 +23,6 @@ import GenesysItemSheet from '@/item/GenesysItemSheet';
 import { GenesysItemSheetData, ItemSheetContext } from '@/vue/SheetContext';
 
 type VueSheetConstructor = new (...args: any[]) => {
-	get vueComponent(): any;
 	getVueContext(): Promise<ItemSheetContext | undefined>;
 };
 
@@ -32,9 +31,9 @@ type VueSheetConstructor = new (...args: any[]) => {
  * @param vueComponent Vue component to use for the sheet.
  * @param sheetType Base class to use for the sheet.
  */
-function basicSheet(vueComponent: any, sheetType: VueSheetConstructor = VueSheet(GenesysItemSheet)) {
+function basicSheet(vueComponent: any, sheetType: VueSheetConstructor = VueSheet(GenesysItemSheet as any)) {
 	return class extends sheetType {
-		override get vueComponent() {
+		get vueComponent() {
 			return vueComponent;
 		}
 

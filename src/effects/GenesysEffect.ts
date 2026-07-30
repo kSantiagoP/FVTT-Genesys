@@ -39,7 +39,7 @@ export default class GenesysEffect extends ActiveEffect {
 		return (this.parent as GenesysActor).items.get(itemId) as GenesysItem | undefined;
 	}
 
-	override apply(actor: Actor, change: ApplicableChangeData<this>): unknown {
+	override apply(actor: Actor.Implementation, change: ActiveEffect.ChangeData): Record<string, any> {
 		const originItem = this.originItem;
 
 		if (originItem && originItem.systemData instanceof TalentDataModel) {

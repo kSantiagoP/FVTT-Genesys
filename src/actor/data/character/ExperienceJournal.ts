@@ -128,11 +128,11 @@ export async function removeJournalEntry(actor: GenesysActor<CharacterDataModel>
 			// Reduce Wound Threshold or Strain Threshold.
 			switch (data.characteristic) {
 				case Characteristic.Brawn:
-					additionalChangeKeys['system.wounds.max'] = (actor.systemData._source.wounds as CombatPool).max - 1;
+					additionalChangeKeys['system.wounds.max'] = ((actor.systemData._source as Record<string, any>).wounds as CombatPool).max - 1;
 					break;
 
 				case Characteristic.Willpower:
-					additionalChangeKeys['system.strain.max'] = (actor.systemData._source.strain as CombatPool).max - 1;
+					additionalChangeKeys['system.strain.max'] = ((actor.systemData._source as Record<string, any>).strain as CombatPool).max - 1;
 					break;
 			}
 

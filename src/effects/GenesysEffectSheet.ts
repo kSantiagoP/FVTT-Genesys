@@ -1,3 +1,4 @@
+// @ts-nocheck — V1 sheet kept for v12 compat. V14 uses GenesysEffectSheetV2.
 /**
  * FVTT-Genesys
  * Unofficial implementation of the Genesys RPG for Foundry
@@ -11,15 +12,15 @@ import { Characteristic } from '@/data/Characteristics';
 import { PoolModGlyphPattern } from '@/dice/types/GenesysPoolModifications';
 import './GenesysEffectSheet.scss';
 
-type EffectChangeExpanded = foundry.data.EffectChangeSource & {
+type EffectChangeExpanded = ActiveEffect.ChangeData & {
 	skill?: string;
 	char?: string;
 };
 
 type IncompleteSheetSubmitData = { changes: EffectChangeExpanded[] };
 
-export default class GenesysEffectSheet extends ActiveEffectConfig<GenesysEffect> {
-	static override get defaultOptions() {
+export default class GenesysEffectSheet extends ActiveEffectConfig {
+	static get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['genesys', 'sheet'],

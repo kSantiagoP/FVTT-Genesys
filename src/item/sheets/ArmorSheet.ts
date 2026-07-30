@@ -16,7 +16,7 @@ import WeaponDataModel from '@/item/data/WeaponDataModel';
 import ItemQualityDataModel from '@/item/data/ItemQualityDataModel';
 
 export default class ArmorSheet extends VueSheet(GenesysItemSheet<ArmorDataModel>) {
-	override get vueComponent() {
+	get vueComponent() {
 		return VueArmorSheet;
 	}
 

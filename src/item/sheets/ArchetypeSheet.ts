@@ -32,7 +32,7 @@ export default class ArchetypeSheet extends VueSheet(GenesysItemSheet<ArchetypeD
 		};
 	}
 
-	override get vueComponent() {
+	get vueComponent() {
 		return VueArchetypeSheet;
 	}
 

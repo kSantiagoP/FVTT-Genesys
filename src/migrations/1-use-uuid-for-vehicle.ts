@@ -8,14 +8,14 @@ import { MigrationStatus } from '@/migrations/MigrationHelper';
  */
 export async function migrate_UseUuidForVehicles() {
 	// Get all the vehicles on the world and compendiums.
-	const vehiclesInWorld = game.actors.filter<GenesysActor<VehicleDataModel>>((actor) => actor.type === 'vehicle');
+	const vehiclesInWorld = game.actors.filter<GenesysActor<VehicleDataModel>>((actor: any) => actor.type === 'vehicle');
 	const vehiclesInCompendium = await Promise.all(
 		game.packs.reduce(
-			(accum, pack) => {
+			(accum: Promise<GenesysActor<VehicleDataModel>>[], pack: CompendiumCollection<any>) => {
 				if (pack.metadata.type === 'Actor') {
-					pack.index.forEach((compendiumIndex) => {
-						if (compendiumIndex.type === 'vehicle') {
-							accum.push(pack.getDocument(compendiumIndex._id) as Promise<GenesysActor<VehicleDataModel>>);
+					pack.index.forEach((entry: any) => {
+						if (entry.type === 'vehicle') {
+							accum.push(pack.getDocument(entry._id) as Promise<GenesysActor<VehicleDataModel>>);
 						}
 					});
 				}

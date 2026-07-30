@@ -461,8 +461,8 @@ export function register() {
 
 		const genesysActorUuid = targetActor.uuid;
 		for (const vehicle of VehicleDataModel._GAME_VEHICLES) {
-			if (vehicle.sheet.rendered && vehicle.systemData.hasCrew(genesysActorUuid)) {
-				vehicle.sheet.render(true);
+			if (vehicle.sheet?.rendered && vehicle.systemData.hasCrew(genesysActorUuid)) {
+				vehicle.sheet?.render(true);
 			}
 		}
 	});

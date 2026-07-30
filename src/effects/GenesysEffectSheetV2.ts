@@ -2,12 +2,12 @@ import { Characteristic } from '@/data/Characteristics';
 import GenesysEffect from './GenesysEffect';
 import { PoolModGlyphPattern } from '@/dice/types/GenesysPoolModifications';
 
-type EffectChangeExpanded = foundry.data.EffectChangeSource & {
+type EffectChangeExpanded = ActiveEffect.ChangeData & {
 	skill?: string;
 	char?: string;
 };
 
-export default class GenesysEffectSheetV2 extends ActiveEffectConfig<GenesysEffect> {
+export default class GenesysEffectSheetV2 extends ActiveEffectConfig {
 	static override DEFAULT_OPTIONS = {
 		classes: ['effect-sheet-v2'],
 	};
@@ -17,14 +17,14 @@ export default class GenesysEffectSheetV2 extends ActiveEffectConfig<GenesysEffe
 		changes: { template: 'systems/genesys/templates/sheets/effect-changes-tab.hbs' },
 	};
 
-	override async _preparePartContext(partId: string, context: Record<string, unknown>): Promise<Record<string, unknown>> {
-		const partContext = (await super._preparePartContext(partId, context)) as Record<string, unknown> & { source: GenesysEffect };
+	override async _preparePartContext(partId: string, context: any, options: any): Promise<any> {
+		const partContext = (await super._preparePartContext(partId, context, options)) as any as { source: GenesysEffect; skills: any; characteristics: any; changes: any };
 
 		if (partId === 'changes') {
 			partContext.skills = Object.fromEntries(CONFIG.genesys.skills.map((skill) => [skill.name, skill.name]));
 			partContext.characteristics = Object.fromEntries(Object.entries(Characteristic).map(([charName, charKey]) => [charKey, charName]));
 
-			partContext.changes = partContext.source.changes.map((change: foundry.data.EffectChangeSource) => {
+			partContext.changes = partContext.source.changes.map((change: ActiveEffect.ChangeData) => {
 				const thisChange = { ...change } as EffectChangeExpanded;
 				const extractDicePoolMod = thisChange.key.split(GenesysEffect.DICE_POOL_MOD_KEY_PATTERN);
 
@@ -45,7 +45,7 @@ export default class GenesysEffectSheetV2 extends ActiveEffectConfig<GenesysEffe
 		return partContext;
 	}
 
-	override _onChangeForm(formConfig: Record<string, unknown>, event: Event) {
+	override _onChangeForm(formConfig: any, event: Event) {
 		super._onChangeForm(formConfig, event);
 
 		const target = event.target as HTMLElement;
@@ -78,7 +78,7 @@ export default class GenesysEffectSheetV2 extends ActiveEffectConfig<GenesysEffe
 		}
 	}
 
-	override _processFormData(event: Event, form: HTMLElement, formData: Record<string, unknown>) {
+	override _processFormData(event: SubmitEvent | null, form: HTMLFormElement, formData: FormDataExtended) {
 		const formDataExpanded = super._processFormData(event, form, formData) as { changes: EffectChangeExpanded[] };
 
 		const dicePoolModificationPattern = new RegExp(`^${PoolModGlyphPattern.source}*$`);

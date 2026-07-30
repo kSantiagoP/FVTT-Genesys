@@ -13,7 +13,7 @@ import BaseItemDataModel from '@/item/data/BaseItemDataModel';
 import TalentDataModel from '@/item/data/TalentDataModel';
 import SkillDataModel from '@/item/data/SkillDataModel';
 import VueSheet from '@/vue/VueSheet';
-import { ActorSheetContext } from '@/vue/SheetContext';
+import { ActorSheetContext, GenesysActorSheetData } from '@/vue/SheetContext';
 import { DragTransferData } from '@/data/DragTransferData';
 
 /**
@@ -37,7 +37,7 @@ export default class AdversarySheet extends VueSheet(GenesysActorSheet<Adversary
 	override async getVueContext(): Promise<ActorSheetContext<AdversaryDataModel>> {
 		return {
 			sheet: this,
-			data: await this.getData(),
+			data: (await this.getData()) as GenesysActorSheetData<AdversaryDataModel>,
 		};
 	}
 
@@ -73,16 +73,18 @@ export default class AdversarySheet extends VueSheet(GenesysActorSheet<Adversary
 				} as Record<string, unknown>);
 			} else if ((this.actor.type as string) !== 'minion') {
 				// If the skill is not on this adversary then add it with 1 rank.
-				clonedDroppedItem = await this._onDropItemCreate(droppedItem.toObject());
+				clonedDroppedItem = await this._onDropItemCreate(droppedItem.toObject()) as GenesysItem<BaseItemDataModel>[];
 
-				await clonedDroppedItem[0].update({ 'system.rank': 1 } as Record<string, unknown>);
+				if (Array.isArray(clonedDroppedItem) && clonedDroppedItem.length > 0) {
+					await clonedDroppedItem[0].update({ 'system.rank': 1 } as Record<string, unknown>);
+				}
 			} else {
 				// Let `super` handle the drop and save a reference to it.
-				clonedDroppedItem = await super._onDropItem(event, data);
+				clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<BaseItemDataModel>[] | undefined;
 			}
 		} else if (AdversaryDataModel.isRelevantTypeForContext('COMBAT', droppedItem.type)) {
 			// Let `super` handle the drop and save a reference to it.
-			clonedDroppedItem = await super._onDropItem(event, data);
+			clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<BaseItemDataModel>[] | undefined;
 		} else if (AdversaryDataModel.isRelevantTypeForContext('TALENT', droppedItem.type)) {
 			const existingItem = this.actor.items.find((item) => (item.type as string) === droppedItem.type && item.name === droppedItem.name);
 
@@ -92,7 +94,7 @@ export default class AdversarySheet extends VueSheet(GenesysActorSheet<Adversary
 					return false;
 				} else {
 					// Let `super` handle the drop and save a reference to it.
-					clonedDroppedItem = await super._onDropItem(event, data);
+					clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<BaseItemDataModel>[] | undefined;
 				}
 			} else if ((droppedItem.type as string) === 'talent') {
 				if (existingItem) {
@@ -102,15 +104,15 @@ export default class AdversarySheet extends VueSheet(GenesysActorSheet<Adversary
 					} as Record<string, unknown>);
 				} else {
 					// Let `super` handle the drop and save a reference to it.
-					clonedDroppedItem = await super._onDropItem(event, data);
+					clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<BaseItemDataModel>[] | undefined;
 				}
 			} else {
 				// Let `super` handle the drop and save a reference to it.
-				clonedDroppedItem = await super._onDropItem(event, data);
+				clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<BaseItemDataModel>[] | undefined;
 			}
 		} else if (AdversaryDataModel.isRelevantTypeForContext('INVENTORY', droppedItem.type)) {
 			// Let `super` handle the drop and save a reference to it.
-			clonedDroppedItem = await super._onDropItem(event, data);
+			clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<BaseItemDataModel>[] | undefined;
 		} else {
 			// If the dropped item is not of a type that we have a default behavior then end early.
 			return false;

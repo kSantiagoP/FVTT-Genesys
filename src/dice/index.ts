@@ -33,6 +33,6 @@ export const GenesysDice = {
  */
 export function register() {
 	Object.values(GenesysDice).forEach((dieType) => {
-		CONFIG.Dice.terms[dieType.DENOMINATION] = dieType;
+		(CONFIG.Dice as any).terms[dieType.DENOMINATION] = dieType;
 	});
 }

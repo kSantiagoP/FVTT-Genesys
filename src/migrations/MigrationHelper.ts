@@ -24,7 +24,7 @@ export async function performMigrations(lastAlpha: string) {
 		return;
 	}
 
-	const isGmHub = game.users.activeGM?.isSelf ?? (game.user.isGM && game.users.filter((user) => user.isGM && user.active).every((candidate) => candidate.id >= game.user.id));
+	const isGmHub = game.users.activeGM?.isSelf ?? (game.user.isGM && game.users.filter((user: User) => user.isGM && user.active).every((candidate: User) => (candidate.id ?? '') >= game.user.id));
 	if (!isGmHub) {
 		ui.notifications.error('Genesys.Migration.MustPerformMigration', { localize: true, permanent: true });
 		return;

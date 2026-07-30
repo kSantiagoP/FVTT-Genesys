@@ -18,7 +18,7 @@ import CareerSkillPrompt from '@/app/CareerSkillPrompt';
 import TalentDataModel from '@/item/data/TalentDataModel';
 import VueSheet from '@/vue/VueSheet';
 import GenesysActorSheet from '@/actor/GenesysActorSheet';
-import { ActorSheetContext } from '@/vue/SheetContext';
+import { ActorSheetContext, GenesysActorSheetData } from '@/vue/SheetContext';
 import { DragTransferData } from '@/data/DragTransferData';
 import { transferInventoryBetweenActors } from '@/operations/TransferBetweenActors';
 import { EquipmentState } from '@/item/data/EquipmentDataModel';
@@ -29,14 +29,14 @@ import GenesysActor from '@/actor/GenesysActor';
  */
 export default class CharacterSheet extends VueSheet(GenesysActorSheet<CharacterDataModel>) {
 
-    override get vueComponent() {
+    get vueComponent() {
         return VueCharacterSheet;
     }
 
     override async getVueContext(): Promise<ActorSheetContext<any>> {
         return {
             sheet: this,
-            data: await this.getData(),
+            data: (await this.getData()) as GenesysActorSheetData<any>,
         };
     }
 

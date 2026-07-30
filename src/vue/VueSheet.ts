@@ -9,17 +9,14 @@
 import { App, createApp, reactive, UnwrapNestedRefs } from 'vue';
 import { ContextBase, RootContext } from '@/vue/SheetContext';
 
-type Constructor = new (...args: any[]) => {
-	activateListeners(html: JQuery): void;
-	close(options?: {}): Promise<void>;
-};
+type Constructor = abstract new (...args: any[]) => any;
 
 function preventSubmit(event: SubmitEvent) {
 	event.preventDefault();
 }
 
 export default function VueSheet<TBase extends Constructor, ContextType extends ContextBase | undefined = ContextBase>(base: TBase) {
-	return class extends base {
+	return class VueSheetMixin extends (base as Constructor) {
 		form?: HTMLFormElement;
 		preventSubmit?: boolean;
 
@@ -88,7 +85,7 @@ export default function VueSheet<TBase extends Constructor, ContextType extends 
 		/**
 		 * Unmount and destroy the sfc app for this sheet on close.
 		 */
-		override async close(options = {}) {
+		async close(options = {}) {
 			this.vueApp?.unmount();
 			this.vueApp = undefined;
 			this.vueContext = undefined;
@@ -108,7 +105,7 @@ export default function VueSheet<TBase extends Constructor, ContextType extends 
 			}
 		}
 
-		override activateListeners(html: JQuery) {
+		activateListeners(html: JQuery) {
 			this.deactivateListeners(html);
 
 			super.activateListeners(html);
@@ -120,5 +117,19 @@ export default function VueSheet<TBase extends Constructor, ContextType extends 
 
 		_activateEditor(_: JQuery | HTMLElement) {}
 		async saveEditor(name: string, _: { remove?: boolean } = {}) {}
+	} as unknown as TBase & {
+		new (...args: any[]): {
+			form?: HTMLFormElement;
+			preventSubmit?: boolean;
+			vueApp?: App;
+			vueContext?: UnwrapNestedRefs<ContextType>;
+			getVueContext(): Promise<ContextType | undefined>;
+			_renderInner(_data: unknown, options: any): JQuery | Promise<JQuery>;
+			close(options?: {}): Promise<void>;
+			deactivateListeners(html: JQuery): void;
+			activateListeners(html: JQuery): void;
+			_activateEditor(_: JQuery | HTMLElement): void;
+			saveEditor(name: string, _?: { remove?: boolean }): Promise<void>;
+		};
 	};
 }

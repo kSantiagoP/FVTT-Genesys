@@ -51,11 +51,11 @@ type DicePromptOptions = {
  * Dice pool prompt.
  */
 export default class DicePrompt extends VueSheet(Application) {
-	override get vueComponent() {
+	get vueComponent() {
 		return VueDicePrompt;
 	}
 
-	static get defaultOptions() {
+	static override get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-dice-prompt'],

@@ -30,11 +30,11 @@ export interface AwardXPContext extends ContextBase {
  * Prompt the user for an XP Award.
  */
 export default class AwardXPPrompt extends VueSheet(Application) {
-	override get vueComponent() {
+	get vueComponent() {
 		return VueAwardXPPrompt;
 	}
 
-	static get defaultOptions() {
+	static override get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-award-xp-prompt'],

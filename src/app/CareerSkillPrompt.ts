@@ -18,11 +18,11 @@ export interface CareerSkillPromptContext extends ContextBase {
 }
 
 export default class CareerSkillPrompt extends VueSheet(Application) {
-	override get vueComponent() {
+	get vueComponent() {
 		return VueCareerSkillPrompt;
 	}
 
-	static get defaultOptions() {
+	static override get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-career-skill-prompt'],

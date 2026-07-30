@@ -17,11 +17,11 @@ export interface SelectCharacterSkillPromptContext extends ContextBase {
 }
 
 export default class SelectCharacterSkillPrompt extends VueSheet(Application) {
-	override get vueComponent() {
+	get vueComponent() {
 		return VueSelectCharacterSkillPrompt;
 	}
 
-	static get defaultOptions() {
+	static override get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-select-character-skill-prompt'],

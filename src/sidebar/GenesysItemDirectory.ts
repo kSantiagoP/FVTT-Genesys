@@ -1,10 +1,8 @@
 import GenesysItem from '@/item/GenesysItem';
 import { DragTransferData, constructDragTransferTypeFromData } from '@/data/DragTransferData';
 
-export default class GenesysItemDirectory extends ItemDirectory<GenesysItem> {
+export default class GenesysItemDirectory extends ItemDirectory {
 	protected _onDragStart(event: ElementDragEvent): void {
-		super._onDragStart(event);
-
 		const dragData = JSON.parse(event.dataTransfer?.getData('text/plain') ?? '{}') as DragTransferData;
 		if (dragData.type === 'Item' && dragData.uuid) {
 			const draggedItem = foundry.utils.fromUuidSync(dragData.uuid) as { type: string } | null;

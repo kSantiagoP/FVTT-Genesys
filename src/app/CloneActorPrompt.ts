@@ -10,11 +10,11 @@ export interface CloneActorPromptContext extends ContextBase {
 }
 
 export default class CloneActorPrompt extends VueSheet(Application) {
-	override get vueComponent() {
+	get vueComponent() {
 		return VueCloneActorPrompt;
 	}
 
-	static get defaultOptions() {
+	static override get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-clone-actor-prompt'],

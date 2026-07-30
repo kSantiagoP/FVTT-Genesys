@@ -81,7 +81,7 @@ function makeCustomizableColorSet(name: string): ColorSet {
 	};
 }
 
-Hooks.once('diceSoNiceReady', (dice3d: Dice3d) => {
+Hooks.once('diceSoNiceReady' as any, (dice3d: any) => {
 	console.log('Genesys | Dice So Nice! Detected, initializing dice...');
 
 	dice3d.addSystem(

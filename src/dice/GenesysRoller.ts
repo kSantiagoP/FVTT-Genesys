@@ -224,13 +224,13 @@ export default class GenesysRoller {
 		await ChatMessage.create(chatData);
 	}
 
-	static parseRollResults(roll: Roll): GenesysRollResults {
+	static parseRollResults(roll: Roll<any>): GenesysRollResults {
 		const faces = roll.dice.reduce((faces: Record<string, string[]>, die) => {
 			const genDie = <GenesysDie>die;
 			if (faces[genDie.denomination] === undefined) {
-				faces[genDie.denomination] = die.results.map((r) => genDie.getResultLabel(r));
+				faces[genDie.denomination] = die.results.map((r) => genDie.getResultLabel(r as DiceTermResult));
 			} else {
-				faces[genDie.denomination].concat(die.results.map((r) => genDie.getResultLabel(r)));
+				faces[genDie.denomination].concat(die.results.map((r) => genDie.getResultLabel(r as DiceTermResult)));
 			}
 
 			return faces;

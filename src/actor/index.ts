@@ -15,7 +15,7 @@ import NemesisDataModel from '@/actor/data/NemesisDataModel';
 import VehicleDataModel from '@/actor/data/VehicleDataModel';
 
 export function register() {
-	CONFIG.Actor.documentClass = GenesysActor;
+	(CONFIG.Actor as any).documentClass = GenesysActor;
 
 	registerDataModels();
 	registerSheets();

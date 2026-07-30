@@ -69,7 +69,7 @@ export async function transferInventoryBetweenActors(dragData: DragTransferData,
 
 	// Clone the contained items and add them to the target actor.
 	for (const containedItem of containedItems) {
-		allCreatedItems.push(await cloneInventoryItemForAnotherActor(containedItem, actor, clonedItem.id));
+		allCreatedItems.push(await cloneInventoryItemForAnotherActor(containedItem, actor, clonedItem.id ?? ''));
 
 		// Delete the contained item from the source actor.
 		await containedItem.delete();

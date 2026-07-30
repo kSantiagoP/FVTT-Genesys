@@ -24,7 +24,7 @@ export default class CareerSheet extends VueSheet(GenesysItemSheet<CareerDataMod
 		};
 	}
 
-	override get vueComponent() {
+	get vueComponent() {
 		return VueCareerSheet;
 	}
 

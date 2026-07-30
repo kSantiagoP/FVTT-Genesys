@@ -17,7 +17,7 @@ import { DragTransferData } from '@/data/DragTransferData';
  * Actor sheet used for Player Characters
  */
 export default class MinionSheet extends AdversarySheet {
-	override get vueComponent() {
+	get vueComponent() {
 		return VueMinionSheet;
 	}
 

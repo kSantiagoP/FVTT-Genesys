@@ -13,7 +13,7 @@ import VueNemesisSheet from '@/vue/sheets/actor/NemesisSheet.vue';
  * Actor sheet used for Player Characters
  */
 export default class NemesisSheet extends AdversarySheet {
-	override get vueComponent() {
+	get vueComponent() {
 		return VueNemesisSheet;
 	}
 }

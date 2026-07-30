@@ -10,22 +10,10 @@ import GenesysEffectSheet from '@/effects/GenesysEffectSheet';
 import GenesysEffectSheetV2 from './GenesysEffectSheetV2';
 
 export function register() {
-	CONFIG.ActiveEffect.documentClass = GenesysEffect;
-
-	if (!game.version.startsWith('12')) {
-		// @ts-expect-error
-		CONFIG.ActiveEffect.legacyTransferral = true;
-		// foundry.applications.sheets.ActiveEffectConfig = GenesysEffectSheetV2;
-	}
+	(CONFIG.ActiveEffect as any).documentClass = GenesysEffect;
 
 	DocumentSheetConfig.unregisterSheet(ActiveEffect, 'core', ActiveEffectConfig);
-	if (game.version.startsWith('12')) {
-		DocumentSheetConfig.registerSheet(ActiveEffect, 'genesys', GenesysEffectSheet, {
-			makeDefault: true,
-		});
-	} else {
-		DocumentSheetConfig.registerSheet(ActiveEffect, 'genesys', GenesysEffectSheetV2, {
-			makeDefault: true,
-		});
-	}
+	DocumentSheetConfig.registerSheet(ActiveEffect, 'genesys', GenesysEffectSheetV2 as any, {
+		makeDefault: true,
+	});
 }

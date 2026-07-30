@@ -34,7 +34,7 @@ export default class StoryPointTracker extends VueSheet(Application) {
 		return StoryPointTracker.#instance;
 	}
 
-	static get defaultOptions() {
+	static override get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['genesys', 'story-point-tracker'],
@@ -43,7 +43,7 @@ export default class StoryPointTracker extends VueSheet(Application) {
 			resizable: false,
 			width: 'auto',
 			preventSubmit: true,
-		};
+		} as any;
 	}
 
 	override async _renderInner(data: object, options: RenderOptions = {}) {
@@ -53,7 +53,7 @@ export default class StoryPointTracker extends VueSheet(Application) {
 		});
 	}
 
-	override get vueComponent() {
+	get vueComponent() {
 		return VueStoryPointTracker;
 	}
 
@@ -91,7 +91,7 @@ export default class StoryPointTracker extends VueSheet(Application) {
 		}
 
 		await game.settings.set(SETTINGS_NAMESPACE, KEY_STORY_POINTS, {
-			player: player ?? game.users.filter((u) => !u.isGM && u.active).length,
+			player: player ?? game.users.filter((u: User) => !u.isGM && u.active).length,
 			gm: gm ?? 1,
 		});
 

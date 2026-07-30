@@ -2,7 +2,7 @@ import VehicleDataModel from '@/actor/data/VehicleDataModel';
 import GenesysActorSheet from '@/actor/GenesysActorSheet';
 import VueSheet from '@/vue/VueSheet';
 import VueVehicleSheet from '@/vue/sheets/actor/VehicleSheet.vue';
-import { ActorSheetContext } from '@/vue/SheetContext';
+import { ActorSheetContext, GenesysActorSheetData } from '@/vue/SheetContext';
 import BaseItemDataModel from '@/item/data/BaseItemDataModel';
 import GenesysItem from '@/item/GenesysItem';
 import GenesysActor from '@/actor/GenesysActor';
@@ -12,14 +12,14 @@ import { EquipmentState } from '@/item/data/EquipmentDataModel';
 import CloneActorPrompt from '@/app/CloneActorPrompt';
 
 export default class VehicleSheet extends VueSheet(GenesysActorSheet<VehicleDataModel>) {
-	override get vueComponent() {
+	get vueComponent() {
 		return VueVehicleSheet;
 	}
 
 	override async getVueContext(): Promise<ActorSheetContext<VehicleDataModel>> {
 		return {
 			sheet: this,
-			data: await this.getData(),
+			data: (await this.getData()) as GenesysActorSheetData<VehicleDataModel>,
 		};
 	}
 
@@ -64,7 +64,7 @@ export default class VehicleSheet extends VueSheet(GenesysActorSheet<VehicleData
 				clonedDroppedItem = await transferInventoryBetweenActors(dragData, this.actor, (type) => VehicleDataModel.isRelevantTypeForContext('INVENTORY', type));
 			} else {
 				// If the item comes from a folder or compendium then let `super` handle the drop and save a reference to it.
-				clonedDroppedItem = await super._onDropItem(event, data);
+				clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<BaseItemDataModel>[] | undefined;
 			}
 
 			// If we sucessfully cloned the dropped inventory item then update the state for any associated effect.
@@ -73,7 +73,7 @@ export default class VehicleSheet extends VueSheet(GenesysActorSheet<VehicleData
 			}
 		} else if (VehicleDataModel.isRelevantTypeForContext('COMBAT', droppedItem.type)) {
 			// Let `super` handle the drop and save a reference to it.
-			clonedDroppedItem = await super._onDropItem(event, data);
+			clonedDroppedItem = await super._onDropItem(event, data) as GenesysItem<BaseItemDataModel>[] | undefined;
 		} else {
 			// If the dropped item is not of a type that we have a default behavior then end early.
 			return false;
