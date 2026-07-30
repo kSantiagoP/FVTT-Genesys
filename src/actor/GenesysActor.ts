@@ -11,93 +11,78 @@ import IHasPreCreate from '@/data/IHasPreCreate';
 import IHasOnDelete from '@/data/IHasOnDelete';
 import { DataModelWithTokenAttributes, TokenAttributeDetails } from '@/token/GenesysTokenDocument';
 
-export default class GenesysActor<ActorDataModel extends foundry.abstract.DataModel = foundry.abstract.DataModel> extends Actor {
-	/**
-	 * Specialized property for accessing `actor.system` in a typed manner.
-	 */
-	get systemData(): ActorDataModel {
-		return <ActorDataModel>this.system;
-	}
+export default class GenesysActor<T extends foundry.abstract.DataModel<any, any, any> = any> extends Actor {
 
-	/**
-	 * Override the _preCreate callback to call preCreate from the data model class, if present.
-	 * @inheritDoc
-	 */
-	protected override async _preCreate(data: PreDocumentId<this['_source']>, options: DocumentModificationContext<this>, user: User) {
-		await (<IHasPreCreate<this>>this.systemData).preCreate?.(this, data, options, user);
+    get systemData(): T {
+        return this.system as T;
+    }
 
-		return super._preCreate(data, options, user);
-	}
+    protected override async _preCreate(data: any, options: any, user: any) {
+        await (<IHasPreCreate<any>>this.systemData).preCreate?.(this, data, options, user);
+        return super._preCreate(data, options, user);
+    }
 
-	/**
-	 * Override the _onDelete callback to call onDelete from the data model class, if present.
-	 * @inheritDoc
-	 */
-	protected override _onDelete(options: DocumentModificationContext<this>, userId: string) {
-		(<IHasOnDelete<this>>this.systemData).onDelete?.(this, options, userId);
+    protected override _onDelete(options: any, userId: string) {
+        (<IHasOnDelete<any>>this.systemData).onDelete?.(this, options, userId);
+        super._onDelete(options, userId);
+    }
 
-		super._onDelete(options, userId);
-	}
+    static override createDialog(data?: { folder?: string | undefined } | undefined, options?: any): Promise<any> {
+        const existingClasses = Array.isArray(options?.classes) ? options.classes : [];
 
-	/**
-	 * Override the createDialog callback to include an unique class that identifies the created dialog.
-	 * @inheritDoc
-	 */
-	static override createDialog(data?: { folder?: string | undefined } | undefined, options?: Partial<FormApplicationOptions> | undefined): Promise<ClientDocument<foundry.documents.BaseActor> | undefined> {
-		// The 'dialog' class needs to be added explicitly, otherwise it won't be added by the super call.
-		const touchedOptions = {
-			...options,
-			classes: [...(options?.classes ?? []), 'dialog', 'dialog-actor-create'],
-		};
+        const touchedOptions = {
+            ...options,
+            classes: [...existingClasses, 'dialog', 'dialog-actor-create'],
+        };
 
-		return super.createDialog(data, touchedOptions);
-	}
+        return super.createDialog(data as any, touchedOptions as any);
+    }
 
-	override async modifyTokenAttribute(attribute: string, value: number, isDelta?: boolean, isBar?: boolean) {
-		const tokenAttributes = (this.systemData.constructor as DataModelWithTokenAttributes)?.tokenAttributes;
-		if (tokenAttributes) {
-			const tokenAttribute = tokenAttributes[attribute] as TokenAttributeDetails | undefined;
-			if (!tokenAttribute || !tokenAttribute.editable) {
-				return this;
-			}
+    override async modifyTokenAttribute(attribute: string, value: number, isDelta?: boolean, isBar?: boolean) {
+        const tokenAttributes = (this.systemData.constructor as DataModelWithTokenAttributes)?.tokenAttributes;
+        if (tokenAttributes) {
+            const tokenAttribute = tokenAttributes[attribute] as TokenAttributeDetails | undefined;
+            if (!tokenAttribute || !tokenAttribute.editable) {
+                return this;
+            }
 
-			return await this.update({
-				[`system.${tokenAttribute.valuePath}`]: isDelta ? Number(foundry.utils.getProperty(this.systemData, tokenAttribute.valuePath)) + value : value,
-			});
-		} else {
-			return super.modifyTokenAttribute(attribute, value, isDelta, isBar);
-		}
-	}
+            return await this.update({
+                [`system.${tokenAttribute.valuePath}`]: isDelta ? Number(foundry.utils.getProperty(this.systemData, tokenAttribute.valuePath)) + value : value,
+            });
+        } else {
+            return super.modifyTokenAttribute(attribute, value, isDelta, isBar);
+        }
+    }
 
-	/**
-	 * Override the rollInitiative method to include rolling for all extra slots tied to the actor.
-	 * @inheritDoc
-	 */
-	override async rollInitiative({ createCombatants = false, rerollInitiative = false, initiativeOptions = {} }: { createCombatants?: boolean; rerollInitiative?: boolean; initiativeOptions?: object } | undefined = {}) {
-		const combat = (await super.rollInitiative({ createCombatants, rerollInitiative, initiativeOptions })) as GenesysCombat;
+    override async rollInitiative(options?: Actor.RollInitiativeOptions) {
+        await super.rollInitiative(options);
 
-		const extraSlots = combat.extraSlotsForRound(combat.round);
-		const extraInitiativeRolls = extraSlots.reduce(
-			(accum, slot) => {
-				const combatant = combat.combatants.get(slot.activationSource) as GenesysCombatant | undefined;
+        // No V14 rollInitiative retorna void, então precisamos buscar o combate ativo manualmente
+        const combat = (this as any).combat ?? game.combat;
+        if (!combat) return;
 
-				if (
-					// Make sure the combatant is linked to this actor.
-					combatant &&
-					((this.isToken && combatant.token === this.token) || (!this.isToken && combatant.actor === this)) &&
-					// Only roll if the actor doesn't have an initiative value or if forcing a reroll.
-					(rerollInitiative || slot.initiative === null)
-				) {
-					accum.combatantsIds.push(combatant.id);
-					accum.activationIds.push(slot.index);
-				}
+        const extraSlots = combat.extraSlotsForRound(combat.round);
+        const extraInitiativeRolls = extraSlots.reduce(
+            (accum: any, slot: any) => {
+                const combatant = combat.combatants.get(slot.activationSource) as GenesysCombatant | undefined;
 
-				return accum;
-			},
-			{ combatantsIds: [], activationIds: [] } as { combatantsIds: string[]; activationIds: number[] },
-		);
+                const cAny = combatant as any;
 
-		await combat.rollInitiative(extraInitiativeRolls.combatantsIds, initiativeOptions, { extraSlotsRolls: extraInitiativeRolls.activationIds });
-		return combat;
-	}
+                if (
+                    combatant &&
+                    ((this.isToken && cAny.token === this.token) || (!this.isToken && cAny.actor === this)) &&
+                    (options?.rerollInitiative ?? false) || slot.initiative === null
+                ) {
+                    accum.combatantsIds.push(cAny.id ?? cAny._id);
+                    accum.activationIds.push(slot.index);
+                }
+
+                return accum;
+            },
+            { combatantsIds: [], activationIds: [] } as { combatantsIds: string[]; activationIds: number[] },
+        );
+
+        await combat.rollInitiative(extraInitiativeRolls.combatantsIds, options?.initiativeOptions, { extraSlotsRolls: extraInitiativeRolls.activationIds });
+        return combat;
+    }
 }

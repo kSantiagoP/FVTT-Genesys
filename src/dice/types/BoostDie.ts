@@ -13,7 +13,7 @@ import { GenesysDieFace } from '@/dice/types/GenesysSymbol';
  * Boost (blue) Die
  */
 export default class BoostDie extends GenesysDie {
-	static override DENOMINATION = 'b';
+	static DENOMINATION = 'b';
 	static override GLYPH = 'B';
 	static override FORMULA = 'db' as const;
 	static override CATEGORY = 'positive' as const;

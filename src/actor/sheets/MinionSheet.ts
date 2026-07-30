@@ -32,7 +32,7 @@ export default class MinionSheet extends AdversarySheet {
 		}
 
 		// Make sure that the item in question exists and this actor doesn't own it.
-		const droppedItem = await fromUuid<GenesysItem<BaseItemDataModel>>(dragData.uuid);
+		const droppedItem = await foundry.utils.fromUuid<GenesysItem<BaseItemDataModel>>(dragData.uuid);
 		if (!droppedItem || droppedItem.actor?.uuid === this.actor.uuid) {
 			return false;
 		}
@@ -44,7 +44,7 @@ export default class MinionSheet extends AdversarySheet {
 
 		// If the dropped item is a skill make sure we don't have it already.
 		if (AdversaryDataModel.isRelevantTypeForContext('SKILL', droppedItem.type)) {
-			if (this.actor.items.find((item) => item.type === droppedItem.type && item.name === droppedItem.name)) {
+			if (this.actor.items.find((item) => (item.type as string) === droppedItem.type && item.name === droppedItem.name)) {
 				return false;
 			}
 		}

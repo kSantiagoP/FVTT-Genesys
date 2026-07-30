@@ -47,7 +47,7 @@ export default class VehicleSheet extends VueSheet(GenesysActorSheet<VehicleData
 		}
 
 		// Make sure that the item in question exists and this actor doesn't own it.
-		const droppedItem = await fromUuid<GenesysItem<BaseItemDataModel>>(dragData.uuid);
+		const droppedItem = await foundry.utils.fromUuid<GenesysItem<BaseItemDataModel>>(dragData.uuid);
 		if (!droppedItem || droppedItem.actor?.uuid === this.actor.uuid) {
 			return false;
 		}
@@ -94,7 +94,7 @@ export default class VehicleSheet extends VueSheet(GenesysActorSheet<VehicleData
 
 		// Make sure that the passenger in question exists and can be processed by this method.
 		let crewUuid = dragData.uuid;
-		const droppedEntity = fromUuidSync(crewUuid) as { type: string } | null;
+		const droppedEntity = foundry.utils.fromUuidSync(crewUuid) as { type: string } | null;
 		if (!droppedEntity || !VehicleDataModel.isRelevantTypeForContext('PASSENGER', droppedEntity.type)) {
 			return false;
 		}
@@ -111,8 +111,8 @@ export default class VehicleSheet extends VueSheet(GenesysActorSheet<VehicleData
 				return false;
 			}
 
-			const aVehicle = await fromUuid<GenesysActor<VehicleDataModel>>(dragData.sourceVehicleUuid!);
-			if (!aVehicle || aVehicle.type !== 'vehicle' || !aVehicle.isOwner) {
+			const aVehicle = await foundry.utils.fromUuid<GenesysActor<VehicleDataModel>>(dragData.sourceVehicleUuid!);
+			if (!aVehicle || (aVehicle.type as string) !== 'vehicle' || !aVehicle.isOwner) {
 				return false;
 			}
 

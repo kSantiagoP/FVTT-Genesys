@@ -198,7 +198,7 @@ export default class GenesysRoller {
 		const attackQualities = weapon.systemData.qualities;
 		await Promise.all(
 			attackQualities.map(async (quality) => {
-				quality.description = await TextEditor.enrichHTML(quality.description, { async: true });
+				quality.description = await TextEditor.enrichHTML(quality.description, { async: true } as any);
 			}),
 		);
 

@@ -118,7 +118,7 @@ export async function removeJournalEntry(actor: GenesysActor<CharacterDataModel>
 			// If there are any entries for the same characteristic with a higher rank, don't allow this to be deleted.
 			if (
 				actor.systemData.experienceJournal.entries.find(
-					(e, i) => i !== index && e.type === EntryType.Characteristic && (<CharacteristicEntryData>e.data).characteristic === data.characteristic && (<CharacteristicEntryData>e.data).rank > data.rank,
+					(e, i) => i !== index && (e.type as string) === EntryType.Characteristic && (<CharacteristicEntryData>e.data).characteristic === data.characteristic && (<CharacteristicEntryData>e.data).rank > data.rank,
 				)
 			) {
 				ui.notifications.info(game.i18n.format('Genesys.Notifications.CannotDeleteCharacteristic', removedEntry.data));
@@ -144,13 +144,13 @@ export async function removeJournalEntry(actor: GenesysActor<CharacterDataModel>
 			const data = <SkillEntryData>removedEntry.data;
 
 			// If the skill doesn't actually exist on the character, there's nothing further to check.
-			const skill = <GenesysItem<SkillDataModel> | undefined>actor.items.find((i) => i.type === 'skill' && i.id === data.id);
+			const skill = <GenesysItem<SkillDataModel> | undefined>actor.items.find((i) => (i.type as string) === 'skill' && i.id === data.id);
 			if (!skill) {
 				break;
 			}
 
 			// If there are any entries for the same skill with a higher rank, don't allow this to be deleted.
-			if (actor.systemData.experienceJournal.entries.find((e, i) => i !== index && e.type === EntryType.Skill && (<SkillEntryData>e.data).id === data.id && (<SkillEntryData>e.data).rank > data.rank)) {
+			if (actor.systemData.experienceJournal.entries.find((e, i) => i !== index && (e.type as string) === EntryType.Skill && (<SkillEntryData>e.data).id === data.id && (<SkillEntryData>e.data).rank > data.rank)) {
 				ui.notifications.info(game.i18n.format('Genesys.Notifications.CannotDeleteSkill', removedEntry.data));
 				return;
 			}
@@ -158,7 +158,7 @@ export async function removeJournalEntry(actor: GenesysActor<CharacterDataModel>
 			// Update the skill's rank to reflect the reduction.
 			await skill.update({
 				'system.rank': Math.max(0, skill.systemData.rank - 1),
-			});
+			} as Record<string, unknown>);
 
 			break;
 		}
@@ -166,7 +166,7 @@ export async function removeJournalEntry(actor: GenesysActor<CharacterDataModel>
 		case EntryType.NewTalent: {
 			const data = <NewTalentEntryData>removedEntry.data;
 
-			const talent = <GenesysItem<TalentDataModel> | undefined>actor.items.find((i) => i.type === 'talent' && i.id === data.id);
+			const talent = <GenesysItem<TalentDataModel> | undefined>actor.items.find((i) => (i.type as string) === 'talent' && i.id === data.id);
 			if (!talent) {
 				break;
 			}
@@ -192,7 +192,7 @@ export async function removeJournalEntry(actor: GenesysActor<CharacterDataModel>
 		case EntryType.TalentRank: {
 			const data = <TalentRankEntryData>removedEntry.data;
 
-			const talent = <GenesysItem<TalentDataModel> | undefined>actor.items.find((i) => i.type === 'talent' && i.id === data.id);
+			const talent = <GenesysItem<TalentDataModel> | undefined>actor.items.find((i) => (i.type as string) === 'talent' && i.id === data.id);
 			if (!talent) {
 				break;
 			}
@@ -212,7 +212,7 @@ export async function removeJournalEntry(actor: GenesysActor<CharacterDataModel>
 
 			await talent.update({
 				'system.rank': talent.systemData.rank - 1,
-			});
+			} as Record<string, unknown>);
 
 			break;
 		}
@@ -224,5 +224,5 @@ export async function removeJournalEntry(actor: GenesysActor<CharacterDataModel>
 	await actor.update({
 		'system.experienceJournal.entries': updatedEntries,
 		...additionalChangeKeys,
-	});
+	} as Record<string, unknown>);
 }

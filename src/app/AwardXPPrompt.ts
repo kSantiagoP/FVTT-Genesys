@@ -34,7 +34,7 @@ export default class AwardXPPrompt extends VueSheet(Application) {
 		return VueAwardXPPrompt;
 	}
 
-	static override get defaultOptions() {
+	static get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-award-xp-prompt'],

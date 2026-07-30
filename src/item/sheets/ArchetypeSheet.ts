@@ -65,6 +65,6 @@ export default class ArchetypeSheet extends VueSheet(GenesysItemSheet<ArchetypeD
 
 		await this.item.update({
 			'system.grantedItems': [...this.item.systemData.grantedItems, droppedItem.toObject()],
-		});
+		} as Record<string, unknown>);
 	}
 }

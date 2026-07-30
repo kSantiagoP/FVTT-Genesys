@@ -62,7 +62,7 @@ async function pickAttackerAndRollAttack(weapon: GenesysItem<VehicleWeaponDataMo
 
 		const backupSkills = new Map(CONFIG.genesys.skills.filter((skill) => weapon.systemData.skills.includes(skill.name)).map((skill) => [skill.name, skill]));
 		for (const member of role.members) {
-			const currentActor = await fromUuid<GenesysActor>(member);
+			const currentActor = await foundry.utils.fromUuid<GenesysActor>(member);
 			if (!currentActor) {
 				continue;
 			}
@@ -112,7 +112,7 @@ async function repairHit(criticalHit: GenesysItem<InjuryDataModel>) {
 
 	for (const role of relevantRoles) {
 		for (const member of role.members) {
-			const currentActor = await fromUuid<GenesysActor>(member);
+			const currentActor = await foundry.utils.fromUuid<GenesysActor>(member);
 			const potentialSkill = currentActor?.items.find((item) => item.type === 'skill' && item.name === skillNameForRepairing);
 
 			if (potentialSkill) {

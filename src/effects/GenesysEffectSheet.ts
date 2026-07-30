@@ -35,11 +35,11 @@ export default class GenesysEffectSheet extends ActiveEffectConfig<GenesysEffect
 		};
 	}
 
-	override get template(): string {
+	get template(): string {
 		return 'systems/genesys/templates/sheets/effect-config.hbs';
 	}
 
-	override async getData(options?: DocumentSheetOptions) {
+	async getData(options?: DocumentSheetOptions) {
 		const data = await super.getData(options);
 
 		// The 'Custom' mode is not explicitly used.
@@ -71,7 +71,7 @@ export default class GenesysEffectSheet extends ActiveEffectConfig<GenesysEffect
 		});
 	}
 
-	override activateListeners(html: JQuery) {
+	activateListeners(html: JQuery) {
 		super.activateListeners(html);
 
 		// Make sure we show/hide the proper `select` elements when picking a dice pool modification.
@@ -120,12 +120,12 @@ export default class GenesysEffectSheet extends ActiveEffectConfig<GenesysEffect
 			},
 			top: (this.position.top ?? 0) + 40,
 			left: (this.position.left ?? 0) + 10,
-		});
+		} as any);
 
 		return await fp.browse();
 	}
 
-	protected override _getSubmitData(updateData?: Record<string, unknown>) {
+	protected _getSubmitData(updateData?: Record<string, unknown>) {
 		const dicePoolModificationPattern = new RegExp(`^${PoolModGlyphPattern.source}*$`);
 		const submitData = super._getSubmitData(updateData) as IncompleteSheetSubmitData;
 

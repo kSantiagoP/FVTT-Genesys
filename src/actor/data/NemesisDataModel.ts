@@ -33,7 +33,7 @@ export default abstract class NemesisDataModel extends AdversaryDataModel implem
 		...AdversaryDataModel.tokenAttributes,
 	};
 
-	async preCreate(actor: GenesysActor<NemesisDataModel>, _data: PreDocumentId<any>, _options: DocumentModificationContext<GenesysActor<NemesisDataModel>>, _user: foundry.documents.BaseUser) {
+	async preCreate(actor: GenesysActor<NemesisDataModel>, _data: Record<string, unknown>, _options: Record<string, unknown>, _user: foundry.documents.BaseUser) {
 		const prototypeToken = {
 			bar1: { attribute: 'wounds' },
 			bar2: { attribute: 'strain' },

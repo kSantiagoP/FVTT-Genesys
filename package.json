@@ -9,20 +9,22 @@
 	"private": true,
 	"scripts": {
 		"build:data": "gulp",
-		"build": "vue-tsc --emitDeclarationOnly && yarn build:data && vite build",
+		"build": "yarn build:data && vite build",
 		"dev": "concurrently \"gulp watch\" \"vite\"",
 		"watch:data": "gulp watch",
 		"lint": "eslint src --ext .vue,.js,.ts",
 		"format": "prettier --write src/ types/",
-		"release": "yarn build && gulp zip"
+		"release": "yarn build && gulp zip",
+		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
+		"@league-of-foundry-developers/foundry-vtt-types": "^13.346.0-beta.20250812191140",
 		"@rushstack/eslint-patch": "^1.7.2",
 		"@types/gulp": "^4.0.10",
 		"@types/handlebars": "^4.1.0",
 		"@types/jquery": "^3.5.29",
 		"@types/node": "^18.11.18",
-		"@vitejs/plugin-vue": "^4.0.0",
+		"@vitejs/plugin-vue": "^5.2.4",
 		"@vue/eslint-config-prettier": "^9.0.0",
 		"@vue/eslint-config-typescript": "^12.0.0",
 		"@yeger/vue-masonry-wall": "^5.0.6",

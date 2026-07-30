@@ -22,7 +22,7 @@ export default class CareerSkillPrompt extends VueSheet(Application) {
 		return VueCareerSkillPrompt;
 	}
 
-	static override get defaultOptions() {
+	static get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-career-skill-prompt'],

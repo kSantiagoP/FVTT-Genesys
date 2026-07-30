@@ -6,6 +6,6 @@
  * @file Utility interface to mark Document DataModel instances that have custom preCreate callbacks.
  */
 
-export default interface IHasPreCreate<DocumentType extends foundry.abstract.Document> {
-	preCreate?(document: DocumentType, data: PreDocumentId<any>, options: DocumentModificationContext<DocumentType>, user: foundry.documents.BaseUser): Promise<void>;
+export default interface IHasPreCreate<DocumentType extends foundry.abstract.Document<any, any, any>> {
+	preCreate?(document: DocumentType, data: Record<string, unknown>, options: Record<string, unknown>, user: foundry.documents.BaseUser): Promise<void>;
 }

@@ -14,7 +14,7 @@ export default class CloneActorPrompt extends VueSheet(Application) {
 		return VueCloneActorPrompt;
 	}
 
-	static override get defaultOptions() {
+	static get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-clone-actor-prompt'],

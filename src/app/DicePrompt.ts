@@ -55,7 +55,7 @@ export default class DicePrompt extends VueSheet(Application) {
 		return VueDicePrompt;
 	}
 
-	static override get defaultOptions() {
+	static get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-dice-prompt'],

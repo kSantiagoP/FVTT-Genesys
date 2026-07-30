@@ -32,7 +32,7 @@ const sortedPassengers = computed(() => [...toRaw(context.data.actor).systemData
 watchEffect(async () => {
 	const foundActors: GenesysActor[] = [];
 	for (const passenger of sortedPassengers.value) {
-		const actor = await fromUuid<GenesysActor>(passenger.uuid);
+		const actor = await foundry.utils.fromUuid<GenesysActor>(passenger.uuid);
 		if (actor) {
 			foundActors.push(actor);
 		}
@@ -52,7 +52,7 @@ async function dropToPassengers(event: DragEvent, relativeToPassengerUuid: strin
 	}
 
 	// Make sure that the entity in question exists and can be processed by this method.
-	const droppedEntity = fromUuidSync(dragData.uuid) as FromUuidSimpleReturnData;
+	const droppedEntity = foundry.utils.fromUuidSync(dragData.uuid) as FromUuidSimpleReturnData;
 	if (!droppedEntity || !VehicleDataModel.isRelevantTypeForContext('PASSENGER', droppedEntity.type)) {
 		return;
 	}
@@ -69,7 +69,7 @@ async function dropToPassengers(event: DragEvent, relativeToPassengerUuid: strin
 	const isDropFromAnotherActor = dragData.sourceVehicleUuid && dragData.sourceVehicleUuid !== actor.uuid;
 	let sourceVehicle = actor;
 	if (isDropFromAnotherActor) {
-		const aVehicle = await fromUuid<GenesysActor<VehicleDataModel>>(dragData.sourceVehicleUuid!);
+		const aVehicle = await foundry.utils.fromUuid<GenesysActor<VehicleDataModel>>(dragData.sourceVehicleUuid!);
 		if (!aVehicle || aVehicle.type !== 'vehicle' || !aVehicle.isOwner) {
 			return;
 		}
@@ -164,7 +164,7 @@ async function dropToRole(event: DragEvent, roleId: string, memberUnder?: ActorU
 	}
 
 	// Make sure that the entity in question exists and can be processed by this method.
-	const droppedEntity = fromUuidSync(dragData.uuid) as FromUuidSimpleReturnData;
+	const droppedEntity = foundry.utils.fromUuidSync(dragData.uuid) as FromUuidSimpleReturnData;
 	if (!droppedEntity || !VehicleDataModel.isRelevantTypeForContext('ROLE', droppedEntity.type)) {
 		return;
 	}
@@ -187,7 +187,7 @@ async function dropToRole(event: DragEvent, roleId: string, memberUnder?: ActorU
 	const isDropFromAnotherActor = dragData.sourceVehicleUuid && dragData.sourceVehicleUuid !== actor.uuid;
 	let sourceVehicle = actor;
 	if (isDropFromAnotherActor) {
-		const aVehicle = await fromUuid<GenesysActor<VehicleDataModel>>(dragData.sourceVehicleUuid!);
+		const aVehicle = await foundry.utils.fromUuid<GenesysActor<VehicleDataModel>>(dragData.sourceVehicleUuid!);
 		if (!aVehicle || aVehicle.type !== 'vehicle' || !aVehicle.isOwner) {
 			return;
 		}

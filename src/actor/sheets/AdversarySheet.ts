@@ -52,7 +52,7 @@ export default class AdversarySheet extends VueSheet(GenesysActorSheet<Adversary
 		}
 
 		// Make sure that the item in question exists and this actor doesn't own it.
-		const droppedItem = await fromUuid<GenesysItem<BaseItemDataModel>>(dragData.uuid);
+		const droppedItem = await foundry.utils.fromUuid<GenesysItem<BaseItemDataModel>>(dragData.uuid);
 		if (!droppedItem || droppedItem.actor?.uuid === this.actor.uuid) {
 			return false;
 		}
@@ -64,18 +64,18 @@ export default class AdversarySheet extends VueSheet(GenesysActorSheet<Adversary
 
 		let clonedDroppedItem: GenesysItem<BaseItemDataModel>[] | undefined | boolean;
 		if (AdversaryDataModel.isRelevantTypeForContext('SKILL', droppedItem.type)) {
-			const existingItem = this.actor.items.find((item) => item.type === droppedItem.type && item.name === droppedItem.name) as GenesysItem<SkillDataModel> | undefined;
+			const existingItem = this.actor.items.find((item) => (item.type as string) === droppedItem.type && item.name === droppedItem.name) as GenesysItem<SkillDataModel> | undefined;
 
 			if (existingItem) {
 				// If the skill already exists just rank it.
 				await existingItem.update({
 					'system.rank': existingItem.systemData.rank + 1,
-				});
-			} else if (this.actor.type !== 'minion') {
+				} as Record<string, unknown>);
+			} else if ((this.actor.type as string) !== 'minion') {
 				// If the skill is not on this adversary then add it with 1 rank.
 				clonedDroppedItem = await this._onDropItemCreate(droppedItem.toObject());
 
-				await clonedDroppedItem[0].update({ 'system.rank': 1 });
+				await clonedDroppedItem[0].update({ 'system.rank': 1 } as Record<string, unknown>);
 			} else {
 				// Let `super` handle the drop and save a reference to it.
 				clonedDroppedItem = await super._onDropItem(event, data);
@@ -84,9 +84,9 @@ export default class AdversarySheet extends VueSheet(GenesysActorSheet<Adversary
 			// Let `super` handle the drop and save a reference to it.
 			clonedDroppedItem = await super._onDropItem(event, data);
 		} else if (AdversaryDataModel.isRelevantTypeForContext('TALENT', droppedItem.type)) {
-			const existingItem = this.actor.items.find((item) => item.type === droppedItem.type && item.name === droppedItem.name);
+			const existingItem = this.actor.items.find((item) => (item.type as string) === droppedItem.type && item.name === droppedItem.name);
 
-			if (droppedItem.type === 'ability') {
+			if ((droppedItem.type as string) === 'ability') {
 				// If the dropped item is an ability, verify we don't already have it on the sheet.
 				if (existingItem) {
 					return false;
@@ -94,12 +94,12 @@ export default class AdversarySheet extends VueSheet(GenesysActorSheet<Adversary
 					// Let `super` handle the drop and save a reference to it.
 					clonedDroppedItem = await super._onDropItem(event, data);
 				}
-			} else if (droppedItem.type === 'talent') {
+			} else if ((droppedItem.type as string) === 'talent') {
 				if (existingItem) {
 					// If the talent already exists just rank it.
 					await existingItem.update({
 						'system.rank': (existingItem as GenesysItem<TalentDataModel>).systemData.rank + 1,
-					});
+					} as Record<string, unknown>);
 				} else {
 					// Let `super` handle the drop and save a reference to it.
 					clonedDroppedItem = await super._onDropItem(event, data);

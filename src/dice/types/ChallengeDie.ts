@@ -13,7 +13,7 @@ import { GenesysDieFace } from '@/dice/types/GenesysSymbol';
  * Challenge (red) Die
  */
 export default class ChallengeDie extends GenesysDie {
-	static override DENOMINATION = 'c';
+	static DENOMINATION = 'c';
 	static override GLYPH = 'C';
 	static override FORMULA = 'dc' as const;
 	static override CATEGORY = 'negative' as const;

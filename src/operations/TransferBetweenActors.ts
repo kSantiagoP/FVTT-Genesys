@@ -48,7 +48,7 @@ export async function transferInventoryBetweenActors(dragData: DragTransferData,
 
 	// Make sure we can access the dropped item, that it's permitted to be dropped on this actor, and that it's being transfered from
 	// another actor the user owns.
-	const droppedItem = await fromUuid<GenesysItem<EquipmentDataModel>>(dragData.uuid);
+	const droppedItem = await foundry.utils.fromUuid<GenesysItem<EquipmentDataModel>>(dragData.uuid);
 	const sourceActor = droppedItem?.actor;
 	if (!droppedItem || !isRelevantType(droppedItem.type) || !sourceActor || !sourceActor.isOwner || sourceActor.uuid === actor.uuid) {
 		return;
@@ -56,7 +56,7 @@ export async function transferInventoryBetweenActors(dragData: DragTransferData,
 
 	// If this is a container make sure to transfer all the contained items so long they also follow the restrictions of what can be dropped to the inventory.
 	let containedItems: GenesysItem<EquipmentDataModel>[] = [];
-	if (droppedItem.type === 'container') {
+	if ((droppedItem.type as string) === 'container') {
 		containedItems = sourceActor.items.filter((item) => (item as GenesysItem<EquipmentDataModel>).systemData.container === droppedItem.id) as GenesysItem<EquipmentDataModel>[];
 		if (!containedItems.every((item) => isRelevantType(item.type))) {
 			return;

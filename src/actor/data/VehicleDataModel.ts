@@ -47,7 +47,7 @@ type RelevantTypes = {
 	CONSUMABLE: string[];
 };
 
-export default abstract class VehicleDataModel extends foundry.abstract.DataModel implements IHasPreCreate<GenesysActor<VehicleDataModel>>, IHasOnDelete<GenesysActor<VehicleDataModel>> {
+export default abstract class VehicleDataModel extends foundry.abstract.DataModel<any, any, any> implements IHasPreCreate<GenesysActor<VehicleDataModel>>, IHasOnDelete<GenesysActor<VehicleDataModel>> {
 	abstract silhouette: number;
 	abstract speed: number;
 	abstract handling: number;
@@ -207,7 +207,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 
 		await actor.update({
 			'system.roles': roles,
-		});
+		} as Record<string, unknown>);
 
 		return roleId;
 	}
@@ -222,7 +222,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 			roles.splice(roleIndex, 1);
 			await actor.update({
 				'system.roles': roles,
-			});
+			} as Record<string, unknown>);
 		}
 	}
 
@@ -236,7 +236,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 			roles[roleIndex].name = newName;
 			await actor.update({
 				'system.roles': roles,
-			});
+			} as Record<string, unknown>);
 		}
 	}
 
@@ -250,7 +250,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 			role.skills.push(skillName);
 			await actor.update({
 				'system.roles': roles,
-			});
+			} as Record<string, unknown>);
 		}
 	}
 
@@ -267,7 +267,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 				role.skills.splice(skillIndex, 1);
 				await actor.update({
 					'system.roles': roles,
-				});
+				} as Record<string, unknown>);
 			}
 		}
 	}
@@ -285,7 +285,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 				role.members.splice(memberIndex, 1);
 				await actor.update({
 					'system.roles': roles,
-				});
+				} as Record<string, unknown>);
 			}
 		}
 	}
@@ -300,7 +300,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 			passengers.push({ uuid: passengerUuid, sort: lastPassengerSort + CONST.SORT_INTEGER_DENSITY });
 			await actor.update({
 				'system.passengers.list': passengers,
-			});
+			} as Record<string, unknown>);
 		}
 	}
 
@@ -313,7 +313,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 			passengers.splice(passengerIndex, 1);
 			await actor.update({
 				'system.passengers.list': passengers,
-			});
+			} as Record<string, unknown>);
 		}
 	}
 
@@ -386,7 +386,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 		await Promise.all(allUpdates);
 	}
 
-	async preCreate(actor: GenesysActor<VehicleDataModel>, _data: PreDocumentId<any>, _options: DocumentModificationContext<GenesysActor<VehicleDataModel>>, _user: User) {
+	async preCreate(actor: GenesysActor<VehicleDataModel>, _data: Record<string, unknown>, _options: Record<string, unknown>, _user: User.Implementation) {
 		const prototypeToken = {
 			bar1: { attribute: 'trauma' },
 			bar2: { attribute: 'strain' },
@@ -396,7 +396,7 @@ export default abstract class VehicleDataModel extends foundry.abstract.DataMode
 		await actor.updateSource({ prototypeToken });
 	}
 
-	onDelete(actor: GenesysActor<VehicleDataModel>, _options: DocumentModificationContext<GenesysActor<VehicleDataModel>>, _userId: string) {
+	onDelete(actor: GenesysActor<VehicleDataModel>, _options: Record<string, unknown>, _userId: string) {
 		VehicleDataModel._GAME_VEHICLES.delete(actor);
 	}
 
@@ -455,7 +455,7 @@ export function register() {
 	// Whenever an actor that is on a vehicle is updated we make sure to re-render the vehicle sheet.
 	Hooks.on('updateActor', (actor) => {
 		const targetActor = actor as GenesysActor;
-		if (targetActor.type === 'vehicle') {
+		if ((targetActor.type as string) === 'vehicle') {
 			return;
 		}
 
@@ -470,7 +470,7 @@ export function register() {
 	Hooks.on('deleteActor', (actor) => {
 		const targetActor = actor as GenesysActor;
 
-		if (targetActor.type === 'vehicle') {
+		if ((targetActor.type as string) === 'vehicle') {
 			// Whenever a vehicle is deleted remove it from the updates array.
 			VehicleDataModel._GAME_VEHICLES.delete(targetActor as GenesysActor<VehicleDataModel>);
 		} else {

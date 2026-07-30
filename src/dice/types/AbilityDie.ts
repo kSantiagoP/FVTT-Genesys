@@ -13,7 +13,7 @@ import { GenesysDieFace } from '@/dice/types/GenesysSymbol';
  * Ability (green) Die
  */
 export default class AbilityDie extends GenesysDie {
-	static override DENOMINATION = 'a';
+	static DENOMINATION = 'a';
 	static override GLYPH = 'A';
 	static override FORMULA = 'da' as const;
 	static override CATEGORY = 'positive' as const;

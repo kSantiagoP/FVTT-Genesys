@@ -62,7 +62,7 @@ type RelevantTypes = {
 	CONSUMABLE: string[];
 };
 
-export default abstract class CharacterDataModel extends foundry.abstract.DataModel implements IHasPreCreate<CharacterActor> {
+export default abstract class CharacterDataModel extends foundry.abstract.DataModel<any, any, any> implements IHasPreCreate<CharacterActor> {
 	abstract characteristics: CharacteristicsContainer;
 	abstract soak: number;
 	abstract defense: Defense;
@@ -131,7 +131,7 @@ export default abstract class CharacterDataModel extends foundry.abstract.DataMo
 	 */
 	get totalSoak(): number {
 		const armorSoak = (<CharacterActor>(<unknown>this.parent)).items
-			.filter((i) => i.type === 'armor' && (<ArmorItem>i).systemData.state === 'equipped')
+			.filter((i) => (i.type as string) === 'armor' && (<ArmorItem>i).systemData.state === 'equipped')
 			.map((i) => (<ArmorItem>i).systemData.soak)
 			.reduce((total, s) => total + s, 0);
 		return this.soak + this.characteristics.brawn + armorSoak;
@@ -142,7 +142,7 @@ export default abstract class CharacterDataModel extends foundry.abstract.DataMo
 	 */
 	get totalDefense(): Defense {
 		const armorDefense = (<CharacterActor>(<unknown>this.parent)).items
-			.filter((i) => i.type === 'armor' && (<ArmorItem>i).systemData.state === 'equipped')
+			.filter((i) => (i.type as string) === 'armor' && (<ArmorItem>i).systemData.state === 'equipped')
 			.map((i) => (<ArmorItem>i).systemData.defense)
 			.reduce((total, d) => total + d, 0);
 
@@ -198,7 +198,7 @@ export default abstract class CharacterDataModel extends foundry.abstract.DataMo
 	}
 
 	get talentPyramidTotals() {
-		const allTalents = (<CharacterActor>(<unknown>this.parent)).items.filter((i) => i.type === 'talent') as GenesysItem<TalentDataModel>[];
+		const allTalents = (<CharacterActor>(<unknown>this.parent)).items.filter((i) => (i.type as string) === 'talent') as GenesysItem<TalentDataModel>[];
 		return allTalents.reduce(
 			(accumulator, talent) => {
 				const talentEffectiveTier = talent.systemData.effectiveTier;
@@ -258,7 +258,7 @@ export default abstract class CharacterDataModel extends foundry.abstract.DataMo
 		}
 
 		// When armor is worn, its encumbrance rating is reduced by three (to a minimum of 0).
-		if (item.type === 'armor') {
+		if ((item.type as string) === 'armor') {
 			if (item.systemData.state === 'equipped') {
 				return Math.max(0, item.systemData.encumbrance - 3) + Math.max(0, item.systemData.encumbrance * (item.systemData.quantity - 1));
 			}
@@ -331,7 +331,7 @@ export default abstract class CharacterDataModel extends foundry.abstract.DataMo
 		await actor.updateSource({ prototypeToken });
 
 		// Already have skills data, so we have no reason to add new ones.
-		if (actor.items.find((i) => i.type === 'skill')) {
+		if (actor.items.find((i) => (i.type as string) === 'skill')) {
 			return;
 		}
 

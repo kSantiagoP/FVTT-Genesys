@@ -13,7 +13,7 @@ import { GenesysDieFace } from '@/dice/types/GenesysSymbol';
  * Difficulty (purple) Die
  */
 export default class DifficultyDie extends GenesysDie {
-	static override DENOMINATION = 'i';
+	static DENOMINATION = 'i';
 	static override GLYPH = 'D';
 	static override FORMULA = 'di' as const;
 	static override CATEGORY = 'negative' as const;

@@ -13,7 +13,7 @@ import GenesysItem from '@/item/GenesysItem';
 import { Characteristic } from '@/data/Characteristics';
 
 export default class GenesysCombatTracker extends CombatTracker<GenesysCombat> {
-	override get template(): string {
+	get template(): string {
 		return 'systems/genesys/templates/sidebar/combat-tracker.hbs';
 	}
 
@@ -28,7 +28,7 @@ export default class GenesysCombatTracker extends CombatTracker<GenesysCombat> {
 			}
 
 			this.#initiativeSkills = (await compendium.getDocuments())
-				.filter((i) => (i as Item).type === 'skill' && (i as GenesysItem<SkillDataModel>).systemData.initiative)
+				.filter((i) => ((i as Item).type as string) === 'skill' && (i as GenesysItem<SkillDataModel>).systemData.initiative)
 				.map((s) => ({ skillName: s.name, skillChar: (s as GenesysItem<SkillDataModel>).systemData.characteristic }));
 		}
 
@@ -67,13 +67,13 @@ export default class GenesysCombatTracker extends CombatTracker<GenesysCombat> {
 		await this.viewed.claimSlot(this.viewed.round, slotIndex, combatant.id);
 	}
 
-	override activateListeners(html: JQuery) {
+	activateListeners(html: JQuery) {
 		super.activateListeners(html);
 
 		html.find('a[data-claim-slot]').on('click', this._onClaimInitiativeSlot.bind(this));
 	}
 
-	override async getData(options: CombatTrackerOptions) {
+	async getData(options: CombatTrackerOptions) {
 		const data = await super.getData(options);
 		const combat = this.viewed;
 
@@ -175,7 +175,7 @@ export default class GenesysCombatTracker extends CombatTracker<GenesysCombat> {
 		return (first.initiative ?? -Infinity) - (second.initiative ?? -Infinity);
 	}
 
-	protected override _contextMenu(html: JQuery<HTMLElement>) {
+	protected _contextMenu(html: JQuery<HTMLElement>) {
 		ContextMenu.create(this, html, '.directory-item.claimed', this._getEntryContextOptions());
 	}
 

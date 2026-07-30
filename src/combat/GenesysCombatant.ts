@@ -16,7 +16,7 @@ import MinionDataModel from '@/actor/data/MinionDataModel';
 import { Characteristic } from '@/data/Characteristics';
 import GenesysRoller from '@/dice/GenesysRoller';
 
-export default class GenesysCombatant extends Combatant<GenesysCombat, GenesysActor> {
+export default class GenesysCombatant extends Combatant {
 	initiativeSkill?: InitiativeSkill;
 
 	get disposition() {
@@ -44,13 +44,13 @@ export default class GenesysCombatant extends Combatant<GenesysCombat, GenesysAc
 	}
 
 	override getInitiativeRoll(skillName: string = 'Unskilled', charFallback: Characteristic = Characteristic.Brawn) {
-		const skill = this.actor.items.find((i) => i.type === 'skill' && i.name.toLowerCase() === skillName.toLowerCase()) as GenesysItem<SkillDataModel> | undefined;
+		const skill = this.actor.items.find((i) => (i.type as string) === 'skill' && i.name.toLowerCase() === skillName.toLowerCase()) as GenesysItem<SkillDataModel> | undefined;
 		const characteristic = skill?.systemData?.characteristic ?? charFallback;
 		const system = this.actor.systemData as CharacterDataModel | AdversaryDataModel;
 		const characteristicValue = system.characteristics[characteristic];
 
 		let skillValue = skill?.systemData?.rank ?? 0;
-		if (skill && this.actor.type === 'minion') {
+		if (skill && (this.actor.type as string) === 'minion') {
 			skillValue = Math.clamp((this.actor.systemData as MinionDataModel).remainingMembers - 1, 0, 5);
 		}
 

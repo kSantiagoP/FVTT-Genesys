@@ -1,6 +1,19 @@
 # Build Artifacts
 /dist
 /lib
+/Genesys.js
+/Genesys.js.map
+/style.css
+/assets
+/lang
+/packs
+/public
+/scripts
+/templates
+/system.json
+/template.json
+/package-lock.json
+/holysheet
 /public/lang
 /public/system.json
 /public/template.json

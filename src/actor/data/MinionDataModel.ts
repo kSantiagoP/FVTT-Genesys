@@ -49,7 +49,7 @@ export default abstract class MinionDataModel extends AdversaryDataModel impleme
 		return Math.max(0, this.groupSize - Math.floor((this.wounds.value - 1) / this.wounds.threshold));
 	}
 
-	async preCreate(actor: GenesysActor<MinionDataModel>, _data: PreDocumentId<any>, _options: DocumentModificationContext<GenesysActor<MinionDataModel>>, _user: foundry.documents.BaseUser) {
+	async preCreate(actor: GenesysActor<MinionDataModel>, _data: Record<string, unknown>, _options: Record<string, unknown>, _user: foundry.documents.BaseUser) {
 		const prototypeToken = {
 			bar1: { attribute: 'wounds' },
 			bar2: { attribute: 'members' },

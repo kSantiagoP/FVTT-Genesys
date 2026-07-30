@@ -34,7 +34,7 @@ export default class StoryPointTracker extends VueSheet(Application) {
 		return StoryPointTracker.#instance;
 	}
 
-	static override get defaultOptions() {
+	static get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['genesys', 'story-point-tracker'],
@@ -146,7 +146,7 @@ export default class StoryPointTracker extends VueSheet(Application) {
 			},
 			content: chatTemplate,
 			style: CONST.CHAT_MESSAGE_STYLES.OOC,
-		});
+		} as any);
 	}
 }
 

@@ -13,7 +13,7 @@ import { GenesysDieFace } from '@/dice/types/GenesysSymbol';
  * Setback (black) Die
  */
 export default class SetbackDie extends GenesysDie {
-	static override DENOMINATION = 's';
+	static DENOMINATION = 's';
 	static override GLYPH = 'S';
 	static override FORMULA = 'ds' as const;
 	static override CATEGORY = 'negative' as const;

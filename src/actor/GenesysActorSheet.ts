@@ -12,67 +12,64 @@ import GenesysItem from '@/item/GenesysItem';
 import './GenesysActorSheet.scss';
 import DicePrompt from '@/app/DicePrompt';
 
-export default class GenesysActorSheet<ActorDataModel extends foundry.abstract.DataModel = foundry.abstract.DataModel, ItemDataModel extends BaseItemDataModel = BaseItemDataModel> extends ActorSheet<
-	GenesysActor<ActorDataModel>,
-	GenesysItem<ItemDataModel>
-> {
-	static override get defaultOptions() {
-		return {
-			...super.defaultOptions,
-			classes: ['genesys', 'sheet', 'actor'],
-			width: 720,
-			height: 640,
-		};
-	}
+export default class GenesysActorSheet<ActorDataModel extends foundry.abstract.DataModel<any, any, any> = foundry.abstract.DataModel<any, any, any>> extends ActorSheet {
+    override get actor(): GenesysActor<ActorDataModel> {
+        return super.actor as GenesysActor<ActorDataModel>;
+    }
 
-	protected override async _onDropFolder(event: DragEvent, data: DropCanvasData<'Folder'>) {
-		if (!this.actor.isOwner) return [];
-		const folder = await Folder.fromDropData(data);
-		if (!folder) return [];
-		if (folder.type !== 'Item') return [];
+    static override get defaultOptions(): ActorSheet.Options {
+        return {
+            ...super.defaultOptions,
+            classes: ['genesys', 'sheet', 'actor'],
+            width: 720,
+            height: 640,
+        };
+    }
 
-		const createdItems: GenesysItem<ItemDataModel>[] = [];
+    protected override async _onDropFolder(event: DragEvent, data: any) {
+        if (!this.actor.isOwner) return [];
 
-		const folderContent = folder.contents;
-		for (const item of folderContent) {
-			const creationResult = await this._onDropItem(new DragEvent(event.type), {
-				uuid: item.uuid,
-				x: data.x,
-				y: data.y,
-			});
+        const folder = await Folder.fromDropData(data);
+        if (!folder) return [];
+        if (folder.type !== 'Item') return [];
 
-			if (!creationResult) {
-				continue;
-			}
+        const createdItems: GenesysItem<any>[] = [];
 
-			if (Array.isArray(creationResult)) {
-				createdItems.push(...creationResult);
-			}
-		}
+        const folderContent = folder.contents;
+        for (const item of folderContent) {
+            const creationResult = await this._onDropItem(new DragEvent(event.type), {
+                uuid: item.uuid,
+                x: data.x,
+                y: data.y,
+            } as any);
 
-		return createdItems;
-	}
+            if (Array.isArray(creationResult)) {
+                createdItems.push(...creationResult);
+            }
+        }
 
-	override activateListeners(html: JQuery) {
-		super.activateListeners(html);
+        return createdItems;
+    }
 
-		if (this.isEditable) {
-			// Foundry v10 and v11 bind this functionality differently so instead we override that behavior with our own.
-			html.find('img[data-edit]').off('click');
-			html.find('img[data-edit]').on('click', this._onEditImage.bind(this));
-		}
+    override activateListeners(html: JQuery<HTMLElement>) {
+        super.activateListeners(html);
 
-		setTimeout(() => {
-			html.find('[data-skill-check]').off('click');
-			html.find('[data-skill-check]').on('click', async (event) => {
-				const target = $(event.delegateTarget);
+        if (this.isEditable) {
+            html.find('img[data-edit]').off('click');
+            html.find('img[data-edit]').on('click', this._onEditImage.bind(this) as any);
+        }
 
-				// Grab the skill name & difficulty
-				const skillName: string = target.data('skill-check');
-				const difficulty: string = target.data('difficulty');
+        setTimeout(() => {
+            html.find('[data-skill-check]').off('click');
+            html.find('[data-skill-check]').on('click', async (event: any) => {
+                const target = $(event.delegateTarget);
 
-				await DicePrompt.promptForRoll(this.actor, skillName, { difficulty });
-			});
-		}, 250);
-	}
+                // Grab the skill name & difficulty
+                const skillName: string = target.data('skill-check');
+                const difficulty: string = target.data('difficulty');
+
+                await DicePrompt.promptForRoll(this.actor, skillName, { difficulty });
+            });
+        }, 250);
+    }
 }

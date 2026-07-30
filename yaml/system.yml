@@ -5,9 +5,10 @@ version: 0.2.19
 compatibility:
   minimum: 12
   verified: 13
-  maximum: 13
+  maximum: 14
 authors:
   - name: Mezryss
+  - name: kSantiagoP
 scripts:
   - scripts/container-query-polyfill/container-query-polyfill.modern.js
 esmodules:

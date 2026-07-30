@@ -52,7 +52,7 @@ watch(
 			for (const skill of role.skills) {
 				for (const member of role.members) {
 					if (!allActorSkills.has(member)) {
-						const targetActor = await fromUuid<GenesysActor<NonVehicleDataModel>>(member);
+						const targetActor = await foundry.utils.fromUuid<GenesysActor<NonVehicleDataModel>>(member);
 						if (!targetActor) {
 							continue;
 						}

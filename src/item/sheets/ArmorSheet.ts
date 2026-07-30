@@ -37,7 +37,7 @@ export default class ArmorSheet extends VueSheet(GenesysItemSheet<ArmorDataModel
 			return;
 		}
 
-		if (droppedItem.type === 'quality') {
+		if ((droppedItem.type as string) === 'quality') {
 			const existingIndex = this.item.systemData.qualities.findIndex((i) => i.name.toLowerCase() === droppedItem.name.toLowerCase());
 			const qualities = this.item.systemData.qualities;
 
@@ -50,7 +50,7 @@ export default class ArmorSheet extends VueSheet(GenesysItemSheet<ArmorDataModel
 				qualities[existingIndex].rating += 1;
 				await this.item.update({
 					'system.qualities': qualities,
-				});
+				} as Record<string, unknown>);
 			} else {
 				// New Quality
 				await this.item.update({
@@ -63,7 +63,7 @@ export default class ArmorSheet extends VueSheet(GenesysItemSheet<ArmorDataModel
 							rating: 1,
 						},
 					],
-				});
+				} as Record<string, unknown>);
 			}
 		}
 	}

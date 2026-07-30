@@ -13,7 +13,7 @@ import { GenesysDieFace } from '@/dice/types/GenesysSymbol';
  * Proficiency (yellow) Die
  */
 export default class ProficiencyDie extends GenesysDie {
-	static override DENOMINATION = 'p';
+	static DENOMINATION = 'p';
 	static override GLYPH = 'P';
 	static override FORMULA = 'dp' as const;
 	static override CATEGORY = 'positive' as const;

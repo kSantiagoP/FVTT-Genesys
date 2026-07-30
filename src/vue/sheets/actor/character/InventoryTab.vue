@@ -54,7 +54,7 @@ async function dropInventoryToSortSlot(event: DragEvent, sortCategory: Equipment
 	}
 
 	// Make sure that the item in question exists and can be processed on this component.
-	let droppedItem = await fromUuid<GenesysItem<EquipmentDataModel>>(dragData.uuid);
+	let droppedItem = await foundry.utils.fromUuid<GenesysItem<EquipmentDataModel>>(dragData.uuid);
 	if (!droppedItem || !CharacterDataModel.isRelevantTypeForContext('INVENTORY', droppedItem.type)) {
 		return;
 	}

@@ -86,10 +86,10 @@ export function register(namespace: string) {
 				ui.notifications.error(game.i18n.format('Genesys.Notifications.MissingCompendium', { name: skillsCompendiumName }));
 			} else if (pack.metadata.type !== 'Item') {
 				ui.notifications.error(game.i18n.format('Genesys.Notifications.WrongCompendiumType', { name: skillsCompendiumName, type: pack.metadata.type }));
-			} else if (!pack.index.some((item) => item.type === 'skill')) {
+			} else if (!pack.index.some((item) => (item.type as string) === 'skill')) {
 				ui.notifications.warn(game.i18n.format('Genesys.Notifications.NoSkillsInCompendium', { name: skillsCompendiumName }));
 			} else {
-				skills = (await pack.getDocuments()).filter((item) => (item as GenesysItem).type === 'skill') as GenesysItem<SkillDataModel>[];
+				skills = (await pack.getDocuments()).filter((item) => ((item as GenesysItem).type as string) === 'skill') as GenesysItem<SkillDataModel>[];
 			}
 
 			CONFIG.genesys.skills = skills;

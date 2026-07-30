@@ -39,7 +39,7 @@ const actorsInRole = ref<GenesysActor[]>([]);
 watchEffect(async () => {
 	const foundActors: GenesysActor[] = [];
 	for (const member of props.members) {
-		const actor = await fromUuid<GenesysActor>(member);
+		const actor = await foundry.utils.fromUuid<GenesysActor>(member);
 		if (actor) {
 			foundActors.push(actor);
 		}

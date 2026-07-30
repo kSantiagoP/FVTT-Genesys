@@ -48,6 +48,7 @@ export default function VueSheet<TBase extends Constructor, ContextType extends 
 		}
 
 		async _renderInner(_data: unknown, options: any) {
+			console.log(this.form);
 			const vueContext = await this.getVueContext();
 
 			// Instantiate our form object.

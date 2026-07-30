@@ -30,7 +30,7 @@ type RelevantTypes = {
 	INVENTORY: string[];
 };
 
-export default abstract class AdversaryDataModel extends foundry.abstract.DataModel {
+export default abstract class AdversaryDataModel extends foundry.abstract.DataModel<any, any, any> {
 	abstract characteristics: CharacteristicsContainer;
 	abstract soak: number;
 	abstract defense: Defense;

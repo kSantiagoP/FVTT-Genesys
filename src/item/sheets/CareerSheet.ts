@@ -41,7 +41,7 @@ export default class CareerSheet extends VueSheet(GenesysItemSheet<CareerDataMod
 		}
 
 		const droppedItem: GenesysItem<SkillDataModel> | undefined = await (<any>GenesysItem.implementation).fromDropData(data);
-		if (!droppedItem || droppedItem.type !== 'skill') {
+		if (!droppedItem || (droppedItem.type as string) !== 'skill') {
 			return;
 		}
 
@@ -52,6 +52,6 @@ export default class CareerSheet extends VueSheet(GenesysItemSheet<CareerDataMod
 
 		await this.item.update({
 			'system.careerSkills': [...this.item.systemData.careerSkills, droppedItem.toObject()],
-		});
+		} as Record<string, unknown>);
 	}
 }

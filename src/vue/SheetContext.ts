@@ -23,7 +23,7 @@ export const RootContext = Symbol('Vue Root Context');
  * Typing for context data injected into Vue sheets.
  */
 export interface BaseSheetContext<
-	DocumentType extends foundry.abstract.Document = foundry.abstract.Document,
+	DocumentType extends foundry.abstract.Document<any, any, any> = foundry.abstract.Document<any, any, any>,
 	SheetOptionsType extends DocumentSheetOptions = DocumentSheetOptions,
 	SheetType extends DocumentSheet<DocumentType, SheetOptionsType> = DocumentSheet<DocumentType, SheetOptionsType>,
 	SheetDataType extends DocumentSheetData<DocumentType> = DocumentSheetData<DocumentType>,
@@ -39,7 +39,7 @@ export interface BaseSheetContext<
 	data: SheetDataType;
 }
 
-export interface GenesysActorSheetData<ActorDataModel extends foundry.abstract.DataModel = foundry.abstract.DataModel> extends ActorSheetData<GenesysActor<ActorDataModel>> {
+export interface GenesysActorSheetData<ActorDataModel extends foundry.abstract.DataModel<any, any, any> = foundry.abstract.DataModel<any, any, any>> extends ActorSheetData {
 	actor: GenesysActor<ActorDataModel>;
 }
 
@@ -47,7 +47,7 @@ export interface GenesysActorSheetData<ActorDataModel extends foundry.abstract.D
  * Typing for context data injected into Vue Actor sheets.
  */
 export interface ActorSheetContext<
-	ActorDataModel extends foundry.abstract.DataModel = foundry.abstract.DataModel,
+	ActorDataModel extends foundry.abstract.DataModel<any, any, any> = foundry.abstract.DataModel<any, any, any>,
 	SheetType extends GenesysActorSheet<ActorDataModel> = GenesysActorSheet<ActorDataModel>,
 	SheetDataType extends GenesysActorSheetData<ActorDataModel> = GenesysActorSheetData<ActorDataModel>,
 > extends ContextBase {

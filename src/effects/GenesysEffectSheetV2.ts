@@ -8,7 +8,7 @@ type EffectChangeExpanded = foundry.data.EffectChangeSource & {
 };
 
 export default class GenesysEffectSheetV2 extends ActiveEffectConfig<GenesysEffect> {
-	static DEFAULT_OPTIONS = {
+	static override DEFAULT_OPTIONS = {
 		classes: ['effect-sheet-v2'],
 	};
 

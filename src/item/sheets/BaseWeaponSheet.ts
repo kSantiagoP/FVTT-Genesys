@@ -36,7 +36,7 @@ export default class BaseWeaponSheet extends VueSheet(GenesysItemSheet<BaseWeapo
 
 				await this.item.update({
 					'system.skills': [...systemData.skills, droppedItem.name],
-				});
+				} as Record<string, unknown>);
 
 				await this.render();
 
@@ -56,7 +56,7 @@ export default class BaseWeaponSheet extends VueSheet(GenesysItemSheet<BaseWeapo
 					qualities[existingIndex].rating += 1;
 					await this.item.update({
 						'system.qualities': qualities,
-					});
+					} as Record<string, unknown>);
 				} else {
 					// New Quality
 					await this.item.update({
@@ -69,7 +69,7 @@ export default class BaseWeaponSheet extends VueSheet(GenesysItemSheet<BaseWeapo
 								rating: 1,
 							},
 						],
-					});
+					} as Record<string, unknown>);
 				}
 
 				return;

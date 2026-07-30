@@ -21,7 +21,7 @@ export default class SelectCharacterSkillPrompt extends VueSheet(Application) {
 		return VueSelectCharacterSkillPrompt;
 	}
 
-	static override get defaultOptions() {
+	static get defaultOptions() {
 		return {
 			...super.defaultOptions,
 			classes: ['app-select-character-skill-prompt'],
