@@ -36,8 +36,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # gh release create não renomeia com #nome — copia com o nome correto
+          cp ./dist/system.json ./manifest.json
+          cp ./genesys-${{ steps.version.outputs.version }}.zip ./genesys.zip
           gh release create release-${{ steps.version.outputs.version }} \
             --title "${{ steps.version.outputs.version }}" \
             --notes "$(sed -n '/^## /{p; :a; n; /^## /q; p; ba}' CHANGELOG.md | head -n -1)" \
-            ./genesys-${{ steps.version.outputs.version }}.zip#genesys.zip \
-            ./dist/system.json#manifest.json
+            ./manifest.json \
+            ./genesys.zip
