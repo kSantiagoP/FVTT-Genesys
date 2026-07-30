@@ -17,10 +17,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # foundry-vtt-types depende de repo privado (@pixi/basis via SSH) —
-          # não acessível no CI. Só é necessário pra typecheck local.
+          # foundry-vtt-types depende de repos privados SSH (@pixi/basis,
+          # @pixi/particle-emitter) — inacessíveis no CI. Só é necessário
+          # pra typecheck local, não pro build.
           jq 'del(.devDependencies["@league-of-foundry-developers/foundry-vtt-types"])' package.json > package.json.tmp
           mv package.json.tmp package.json
+          rm -f yarn.lock
           yarn install
 
       - name: Build
