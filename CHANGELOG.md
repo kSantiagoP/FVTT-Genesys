@@ -1,3 +1,13 @@
+## Beta 0.3.0
+### Changes
+- [MIGRATION]: Full Foundry VTT v14 compatibility — system.yml, type stubs, sheets (kSantiagoP)
+- [FIX]: Drag and drop from sidebar/compendium to actor sheets (kSantiagoP)
+- [FIX]: Remove unused @ts-expect-error and dead V1 GenesysEffectSheet (kSantiagoP)
+- [FIX]: Remove version hacks (game.version.startsWith) — sistema agora requer v14 (kSantiagoP)
+- [INFRA]: Repository URLs redirecionadas para kSantiagoP/FVTT-Genesys (kSantiagoP)
+- [INFRA]: GitHub Actions release pipeline reformulada (kSantiagoP)
+- [INFRA]: authors atualizado — kSantiagoP adicionado como mantenedor (kSantiagoP)
+
 ## Alpha 0.2.19
 ### Changes
 - [FIX](https://github.com/kSantiagoP/FVTT-Genesys/pull/258): Apply roll mode to geneys dice rolls (thanks @KitCat420)
