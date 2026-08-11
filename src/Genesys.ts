@@ -35,7 +35,7 @@ async function doAlphaNotice(lastAlpha: string) {
     if (!game.user.isGM) {
         return;
     }
-    //test
+
     const [lastMajor, lastMinor, lastRevision] = lastAlpha.split('.').map((v: string) => parseInt(v));
     const [currMajor, currMinor, currRevision] = game.system.version.split('.').map((v: string) => parseInt(v));
 
